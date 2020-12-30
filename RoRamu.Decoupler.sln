@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoRamu.Decoupler.Common", "src\RoRamu.Decoupler.Common\RoRamu.Decoupler.Common.csproj", "{A0EF4C39-CFFD-4EB4-A96E-BF46589DBB17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoRamu.Decoupler.Generator.Inbound", "src\RoRamu.Decoupler.Generator.Inbound\RoRamu.Decoupler.Generator.Inbound.csproj", "{DE1C9626-E1E4-4F8D-8894-0164AE57017A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoRamu.Decoupler.Generator.Receiver", "src\RoRamu.Decoupler.Generator.Receiver\RoRamu.Decoupler.Generator.Receiver.csproj", "{DE1C9626-E1E4-4F8D-8894-0164AE57017A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoRamu.Decoupler.Generator.Outbound", "src\RoRamu.Decoupler.Generator.Outbound\RoRamu.Decoupler.Generator.Outbound.csproj", "{C0D9119B-E61B-4A3A-8647-538003B47E35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoRamu.Decoupler.Generator.Transmitter", "src\RoRamu.Decoupler.Generator.Transmitter\RoRamu.Decoupler.Generator.Transmitter.csproj", "{C0D9119B-E61B-4A3A-8647-538003B47E35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
