@@ -1,0 +1,9 @@
+<Project>
+
+    <ItemGroup>
+        <!-- <PackageReference Update="RoRamu.Utils" Version="*" /> -->
+        <!-- <PackageReference Update="RoRamu.Utils.Logging" Version="*" /> -->
+        <PackageReference Update="RoRamu.Utils.Messaging" Version="*" />
+    </ItemGroup>
+
+</Project>

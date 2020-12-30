@@ -1,0 +1,4 @@
+<Project>
+    <Import Project="$(MSBuildThisFileDirectory)license.props" />
+    <Import Project="$(MSBuildThisFileDirectory)packages.props" />
+</Project>
