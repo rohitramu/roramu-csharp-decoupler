@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="..\RoRamu.Decoupler\RoRamu.Decoupler.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="RoRamu.Utils.Messaging" />
+    </ItemGroup>
+
+</Project>

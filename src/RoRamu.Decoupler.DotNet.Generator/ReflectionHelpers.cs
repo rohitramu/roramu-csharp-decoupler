@@ -1,4 +1,4 @@
-namespace RoRamu.Decoupler.DotNetGenerator
+namespace RoRamu.Decoupler.DotNet.Generator
 {
     using System;
     using System.Collections.Generic;

@@ -6,10 +6,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\RoRamu.Decoupler.DotNetGenerator\RoRamu.Decoupler.DotNetGenerator.csproj" />
+        <ProjectReference Include="..\..\src\RoRamu.Decoupler.DotNet.Generator\RoRamu.Decoupler.DotNet.Generator.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="RoRamu.Utils.CSharp" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
         <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 
