@@ -1,5 +1,7 @@
 namespace RoRamu.Decoupler
 {
+    using System;
+
     /// <summary>
     /// Represents the definition of an operation in a contract.
     /// </summary>
@@ -13,7 +15,12 @@ namespace RoRamu.Decoupler
         /// <summary>
         /// The return type of the operation.
         /// </summary>
-        public string ReturnType { get; }
+        public Type ReturnType { get; }
+
+        /// <summary>
+        /// A description of this operation.
+        /// </summary>
+        public string Description { get; }
 
         /// <summary>
         /// The parameters that the operation requires as input.
@@ -25,10 +32,12 @@ namespace RoRamu.Decoupler
         /// </summary>
         /// <param name="name">The name of the operation.</param>
         /// <param name="returnType">The return type of the operation.</param>
-        public OperationDefinition(string name, string returnType)
+        /// <param name="description">A description of this operation.</param>
+        public OperationDefinition(string name, Type returnType, string description)
         {
-            this.Name = name;
-            this.ReturnType = returnType;
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.Description = description;
+            this.ReturnType = returnType ?? throw new ArgumentNullException(nameof(returnType));
         }
     }
 }

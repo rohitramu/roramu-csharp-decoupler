@@ -2,10 +2,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\RoRamu.Decoupler\RoRamu.Decoupler.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="RoRamu.Utils.Messaging" />
+        <ProjectReference Include="..\RoRamu.Decoupler.DotNet\RoRamu.Decoupler.DotNet.csproj" />
     </ItemGroup>
 
 </Project>

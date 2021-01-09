@@ -3,6 +3,8 @@ namespace RoRamu.Decoupler.DotNet.Generator
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Xml;
+    using RoRamu.Utils.CSharp;
 
     /// <summary>
     /// Produces a contract given a C# interface.
@@ -43,28 +45,41 @@ namespace RoRamu.Decoupler.DotNet.Generator
                 return this.ContractDefinition;
             }
 
+            // Get the XML documentation file for the assembly that contains the interface
+            bool addDocs = this.InterfaceType.Assembly.TryGetXmlDocumentationFile(out XmlDocument xmlDocumentationFile);
+
             // Get all of the inherited interfaces
             IEnumerable<Type> interfaces = ReflectionHelpers.GetInheritedInterfaces(this.InterfaceType);
 
             // Get all of the methods in the interfaces
+            // TODO: Deal with naming conflicts between methods from different interfaces
             IEnumerable<MethodInfo> methods = ReflectionHelpers.GetMethods(interfaces);
 
-            // Get the name of the contract
-            string contractName = InterfaceContractDefinitionBuilder.GetContractNameFromInterface(this.InterfaceType);
-
             // Create the contract definition
-            ContractDefinition contract = new ContractDefinition(contractName);
+            ContractDefinition contract = new ContractDefinition(
+                name: this.InterfaceType.Name, // this.GetInterfaceName(),
+                description: addDocs
+                    ? this.InterfaceType.GetDocumentationComment(xmlDocumentationFile)
+                    : null
+            );
 
             // Add each method to the contract
             foreach (MethodInfo method in methods)
             {
                 // Create the operation
-                OperationDefinition operation = new OperationDefinition(method.Name, method.ReturnType.FullName);
+                OperationDefinition operation = new OperationDefinition(
+                    name: method.Name,
+                    returnType: method.ReturnType, // TODO: Validate that input and outputs are either value types or POCOs
+                    description: addDocs
+                        ? method.GetDocumentationComment(xmlDocumentationFile)
+                        : null
+                );
 
                 // Add the parameters
                 HashSet<string> seenParameterNames = new HashSet<string>();
                 foreach (ParameterInfo parameter in method.GetParameters())
                 {
+                    // TODO: Validate that input and outputs are either value types or POCOs
                     // Validate that we don't have a duplicate parameter
                     if (seenParameterNames.Contains(parameter.Name))
                     {
@@ -87,7 +102,7 @@ namespace RoRamu.Decoupler.DotNet.Generator
                     }
 
                     // Add the parameter to the operation
-                    operation.Parameters.Add(new ParameterDefinition(parameter.Name, parameter.ParameterType.FullName));
+                    operation.Parameters.Add(new ParameterDefinition(parameter.Name, parameter.ParameterType));
 
                     // Mark the parameter name as "seen"
                     seenParameterNames.Add(parameter.Name);
@@ -103,12 +118,13 @@ namespace RoRamu.Decoupler.DotNet.Generator
             return contract;
         }
 
-        private static string GetContractNameFromInterface(Type interfaceType)
+        private string GetInterfaceName()
         {
-            string interfaceName = interfaceType.Name;
+            string interfaceName = this.InterfaceType.Name;
 
             // If the name starts with an "I" (convention for interfaces in C#), then remove it.
-            // NOTE: If the second character is not capitalized, the "I" is most likely part of the first word rather than following the convention.
+            // NOTE: If the second character is not capitalized, the "I" is most likely part of the
+            // first word rather than following the convention of starting interface names with an "I".
             if (interfaceName.Length >= 2 && interfaceName[0] == 'I' && char.IsUpper(interfaceName[1]))
             {
                 // Take everything except the first character

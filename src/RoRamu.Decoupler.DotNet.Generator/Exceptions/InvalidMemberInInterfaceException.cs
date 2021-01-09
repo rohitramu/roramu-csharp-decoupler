@@ -3,6 +3,7 @@
     using System;
     using System.Reflection;
     using System.Runtime.Serialization;
+    using RoRamu.Utils.CSharp;
 
     /// <summary>
     /// Indicates that the provided type does not represent an interface.
@@ -29,7 +30,7 @@
 
         private static string GetErrorMessage(Type @interface, MemberInfo invalidMember, string reason)
         {
-            return $"The member '{invalidMember.Name}' of the interface '{@interface.FullName}' is not allowed: {reason}.";
+            return $"The member '{invalidMember.Name}' of the interface '{@interface.GetCSharpName()}' is not allowed: {reason}.";
         }
 
         /// <inheritdoc/>

@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "Test app - .NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -13,6 +13,24 @@
             "program": "${workspaceFolder}/test/RoRamu.Decoupler.DotNet.Generator.Test/bin/Debug/net5.0/RoRamu.Decoupler.DotNet.Generator.Test.dll",
             "args": [],
             "cwd": "${workspaceFolder}/test/RoRamu.Decoupler.DotNet.Generator.Test",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Transmitter.App - .NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/src/RoRamu.Decoupler.DotNet.Generator.Transmitter.App/bin/Debug/net5.0/RoRamu.Decoupler.DotNet.Generator.Transmitter.App.exe",
+            "args": [
+                "${workspaceFolder}/test/RoRamu.Decoupler.DotNet.Generator.Test/bin/Debug/net5.0/RoRamu.Decoupler.DotNet.Generator.Test.dll",
+                ".run",
+                "Public",
+                "RoRamu.Custom.Namespace"
+            ],
+            "cwd": "${workspaceFolder}/src/RoRamu.Decoupler.DotNet.Generator.Transmitter.App",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

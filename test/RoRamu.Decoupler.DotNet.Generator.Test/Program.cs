@@ -2,30 +2,98 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.Loader;
     using System.Text;
+    using System.Threading.Tasks;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Emit;
-    using Newtonsoft.Json;
+    using RoRamu.Decoupler.DotNet;
+    using RoRamu.Decoupler.DotNet.Generator.Transmitter;
+    using RoRamu.Utils;
     using RoRamu.Utils.CSharp;
 
+    /// <summary>
+    ///
+    /// </summary>
     public class Program
     {
-        public static void Main()
+        /// <summary>
+        ///
+        /// </summary>
+        public static async Task Main()
         {
-            // TestModel();
-            TestCSharpGeneration();
+            TestModel();
+            // TestCSharpGeneration();
 
             Console.WriteLine();
             Console.WriteLine();
+
+            // GeneratedTransmitter_IMyContract impl = new GeneratedTransmitter_IMyContract(new TestRequestTransmitter());
+            // Console.WriteLine($"Result: {await impl.SayGoodbyeAsync("This is my goodbye message")}");
+        }
+
+        private class TestRequestTransmitter : IOperationInvocationTransmitter
+        {
+            public void TransmitMessage(OperationInvocation operationInvocation)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"== MESSAGE ==");
+                Console.WriteLine(this.GetOperationDetails(operationInvocation));
+            }
+
+            public Task TransmitMessageAsync(OperationInvocation operationInvocation)
+            {
+                Console.WriteLine($"== MESSAGE ASYNC ==");
+                Console.WriteLine(this.GetOperationDetails(operationInvocation));
+
+                return Task.CompletedTask;
+            }
+
+            public T TransmitRequest<T>(OperationInvocation<T> operationInvocation)
+            {
+                Console.WriteLine($"== REQUEST ==");
+                Console.WriteLine(this.GetOperationDetails(operationInvocation, typeof(T)));
+
+                return default;
+            }
+
+            public Task<T> TransmitRequestAsync<T>(OperationInvocation<T> operationInvocation)
+            {
+                Console.WriteLine($"== REQUEST ASYNC ==");
+                Console.WriteLine(this.GetOperationDetails(operationInvocation, typeof(T)));
+
+                return Task.FromResult<T>(default);
+            }
+
+            private string GetOperationDetails(OperationInvocation operation, Type returnType = null)
+            {
+                StringBuilder sb = new();
+                sb.AppendLine($"Operation: {operation.Name}");
+                if (returnType != null)
+                {
+                    sb.AppendLine($"Return type: {returnType.GetCSharpName()}");
+                }
+                if (operation.Parameters.Any())
+                {
+                    sb.AppendLine("Parameters:");
+                    foreach (ParameterValue parameter in operation.Parameters)
+                    {
+                        sb.AppendLine($"{parameter.Type.GetCSharpName()} {parameter.Name} = {parameter.Value}".Indent());
+                    }
+                }
+
+                string result = sb.ToString().TrimEnd();
+                return result;
+            }
         }
 
         private static void TestCSharpGeneration()
         {
-            CSharpFile file = new CSharpFile(
-                "Test.Generated",
+            CSharpFile file = new(
+                "RoRamu.Decoupler.DotNet.Generator.Test",
                 null,
                 new CSharpClass[]
                 {
@@ -39,12 +107,13 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
                         {
                             new CSharpProperty(
                                 "Name",
-                                typeof(string),
+                                typeof(string).GetCSharpName(),
                                 CSharpAccessModifier.Public,
                                 null,
                                 new CSharpDocumentationComment("Name of the person to greet.")
                             )
                         },
+                        null,
                         new CSharpMethod[]
                         {
                             new CSharpMethod(
@@ -52,10 +121,10 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
                                 CSharpAccessModifier.Public,
                                 false,
                                 false,
-                                typeof(string).FullName,
+                                typeof(string).GetCSharpName(),
                                 new CSharpParameter[]
                                 {
-                                    new CSharpParameter("message", typeof(string), "The message to show."),
+                                    new CSharpParameter("message", typeof(string).GetCSharpName(), "The message to show."),
                                 },
 @"
 return $""Hello, {this.Name}!  {message}"";
@@ -123,11 +192,17 @@ Severity: { codeIssue.Severity}
 
         private static void TestModel()
         {
-            InterfaceContractDefinitionBuilder builder = new InterfaceContractDefinitionBuilder(typeof(IMyContract));
+            InterfaceContractDefinitionBuilder builder = new(typeof(IMyContract));
             ContractDefinition contract = builder.Build();
 
-            string contractJson = JsonConvert.SerializeObject(contract, Formatting.Indented);
-            Console.WriteLine(contractJson);
+            TransmitterGenerator generator = new(
+                ".run/",
+                "RoRamu.Decoupler.DotNet.Generator.Test",
+                CSharpAccessModifier.Public
+            );
+            generator.Run(contract);
+            // string contractJson = JsonConvert.SerializeObject(contract, Formatting.Indented);
+            // Console.WriteLine(contractJson);
         }
     }
 }

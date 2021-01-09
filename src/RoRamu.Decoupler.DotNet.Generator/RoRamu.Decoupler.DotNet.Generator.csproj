@@ -4,4 +4,9 @@
         <ProjectReference Include="..\RoRamu.Decoupler\RoRamu.Decoupler.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="RoRamu.Utils.CSharp" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    </ItemGroup>
+
 </Project>
