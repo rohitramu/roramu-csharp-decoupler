@@ -11,6 +11,7 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Emit;
     using RoRamu.Decoupler.DotNet;
+    using RoRamu.Decoupler.DotNet.Receiver;
     using RoRamu.Decoupler.DotNet.Transmitter;
     using RoRamu.Utils;
     using RoRamu.Utils.CSharp;
@@ -117,8 +118,8 @@ Severity: { codeIssue.Severity}
 
         private static async Task RunGeneratedCode()
         {
-            // IMyContract impl = new GeneratedTransmitter_IMyContract(new TestRequestTransmitter());
-            // var response = await impl.SayGoodbyeAsync("This is my goodbye message");
+            // IMyContract impl = new GeneratedTransmitter_IMyContract(new LocalRequestTransmitter<IMyContract>(new GeneratedReceiver_IMyContract(new MyImplementation())));
+            // var response = await impl.SayGoodbyeAsync("Harjaap");
             // Console.WriteLine($"!!Result: {response}");
 
             // var receiver = new GeneratedReceiver_IMyContract(new MyImplementation());
@@ -134,9 +135,9 @@ Severity: { codeIssue.Severity}
                 return $"Goodbye, {message}";
             }
 
-            public Task<int> SayGoodbyeAsync(string message)
+            public Task<string> SayGoodbyeAsync(string message)
             {
-                return Task.FromResult(this.SayGoodbye(message).Length);
+                return Task.FromResult(this.SayGoodbye(message));
             }
 
             public void SayHello(long val, IMyContract test)

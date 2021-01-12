@@ -27,7 +27,7 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
         /// </summary>
         /// <param name="message">The message.</param>
         /// <returns>An integer.</returns>
-        Task<int> SayGoodbyeAsync(string message);
+        Task<string> SayGoodbyeAsync(string message);
 
         /// <summary>
         /// Says nothing.  A no-op.
