@@ -1,5 +1,8 @@
 namespace RoRamu.Decoupler
 {
+    using System;
+    using System.Collections.Generic;
+
     /// <summary>
     /// The definition of a contract between two components in a system.
     /// </summary>
@@ -18,17 +21,19 @@ namespace RoRamu.Decoupler
         /// <summary>
         /// The operations in this contract.
         /// </summary>
-        public OperationDefinitionList Operations = new OperationDefinitionList();
+        public IEnumerable<OperationDefinition> Operations { get; }
 
         /// <summary>
         /// Creates a new <see cref="ContractDefinition" /> object.
         /// </summary>
         /// <param name="name">The name of this contract (e.g. the name of the class which will be generated from this contract).</param>
         /// <param name="description">A description of this contract.</param>
-        public ContractDefinition(string name, string description)
+        /// <param name="operations">The operations in this contract.</param>
+        public ContractDefinition(string name, string description, IEnumerable<OperationDefinition> operations)
         {
             this.Name = name;
             this.Description = description;
+            this.Operations = operations ?? Array.Empty<OperationDefinition>();
         }
     }
 }

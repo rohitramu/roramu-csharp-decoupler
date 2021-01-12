@@ -1,4 +1,4 @@
-namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
+namespace RoRamu.Decoupler.DotNet.Transmitter
 {
     using System;
 
@@ -16,7 +16,7 @@ namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
         /// Creates a new <see cref="Transmitter" /> object.
         /// </summary>
         /// <param name="requestTransmitter">The transmitter implementation.</param>
-        public Transmitter(IOperationInvocationTransmitter requestTransmitter)
+        protected Transmitter(IOperationInvocationTransmitter requestTransmitter)
         {
             this.RequestTransmitter = requestTransmitter ?? throw new ArgumentNullException(nameof(requestTransmitter));
         }

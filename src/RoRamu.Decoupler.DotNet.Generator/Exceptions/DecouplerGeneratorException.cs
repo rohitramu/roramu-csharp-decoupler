@@ -18,7 +18,7 @@
         /// Initializes a new exception.
         /// </summary>
         /// <param name="interface">The type which was used as the input to the generator.</param>
-        public DecouplerGeneratorException(Type @interface) : base()
+        internal DecouplerGeneratorException(Type @interface) : base()
         {
             this.GivenType = @interface;
         }
@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="interface">The type which was used as the input to the generator.</param>
         /// <param name="message">The message.</param>
-        public DecouplerGeneratorException(Type @interface, string message) : base(message)
+        internal DecouplerGeneratorException(Type @interface, string message) : base(message)
         {
             this.GivenType = @interface;
         }
@@ -39,7 +39,7 @@
         /// <param name="interface">The type which was used as the input to the generator.</param>
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
-        public DecouplerGeneratorException(Type @interface, string message, Exception innerException) : base(message, innerException)
+        internal DecouplerGeneratorException(Type @interface, string message, Exception innerException) : base(message, innerException)
         {
             this.GivenType = @interface;
         }

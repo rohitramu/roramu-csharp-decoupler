@@ -18,22 +18,22 @@ namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
 
             string assemblyFile = args[0];
 
-            string outputDirectory = args.Length >= 2
-                ? Path.GetFullPath(args[1])
-                : Directory.GetCurrentDirectory();
-
-            string accessModifier = args.Length >= 3
-                ? args[2]
-                : CSharpAccessModifier.Public.ToString();
-
-            string @namespace = args.Length >= 4
-                ? args[3]
+            string @namespace = args.Length >= 2
+                ? args[1]
                 : "Generated.By.RoRamu.Decoupler";
+
+            string outputDirectory = args.Length >= 3
+                ? Path.GetFullPath(args[2])
+                : Path.Combine(Directory.GetCurrentDirectory(), ".generated");
+
+            string accessModifier = args.Length >= 4
+                ? args[3]
+                : CSharpAccessModifier.Public.ToString();
 
             Program.Run(assemblyFile, outputDirectory, accessModifier, @namespace);
         }
 
-        private static void Run(string assemblyFile, string outputDirectory, string accessModifier, string @namespace)
+        public static void Run(string assemblyFile, string outputDirectory, string accessModifier, string @namespace)
         {
             if (!File.Exists(assemblyFile))
             {
@@ -58,11 +58,11 @@ namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
             Assembly assembly = Assembly.LoadFrom(assemblyFile);
             IEnumerable<Type> interfaces = Program.GetInterfaces(assembly);
 
-            TransmitterGenerator generator = new(outputDirectory, @namespace, accessModifierEnum);
+            TransmitterGenerator generator = new();
             foreach (Type @interface in interfaces)
             {
                 ContractDefinition contract = new InterfaceContractDefinitionBuilder(@interface).Build();
-                generator.Run(contract);
+                generator.Run(contract, $"Generated_{@interface.GetCSharpName(identifierOnly: true)}", "RoRamu.Decoupler.DotNet.Transmitter.Test", accessModifierEnum);
             }
         }
 

@@ -11,7 +11,7 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Emit;
     using RoRamu.Decoupler.DotNet;
-    using RoRamu.Decoupler.DotNet.Generator.Transmitter;
+    using RoRamu.Decoupler.DotNet.Transmitter;
     using RoRamu.Utils;
     using RoRamu.Utils.CSharp;
 
@@ -25,122 +25,12 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
         /// </summary>
         public static async Task Main()
         {
-            TestModel();
-            // TestCSharpGeneration();
+            await GenerateCode();
+
+            // await RunGeneratedCode();
 
             Console.WriteLine();
             Console.WriteLine();
-
-            // GeneratedTransmitter_IMyContract impl = new GeneratedTransmitter_IMyContract(new TestRequestTransmitter());
-            // Console.WriteLine($"Result: {await impl.SayGoodbyeAsync("This is my goodbye message")}");
-        }
-
-        private class TestRequestTransmitter : IOperationInvocationTransmitter
-        {
-            public void TransmitMessage(OperationInvocation operationInvocation)
-            {
-                Console.WriteLine();
-                Console.WriteLine($"== MESSAGE ==");
-                Console.WriteLine(this.GetOperationDetails(operationInvocation));
-            }
-
-            public Task TransmitMessageAsync(OperationInvocation operationInvocation)
-            {
-                Console.WriteLine($"== MESSAGE ASYNC ==");
-                Console.WriteLine(this.GetOperationDetails(operationInvocation));
-
-                return Task.CompletedTask;
-            }
-
-            public T TransmitRequest<T>(OperationInvocation<T> operationInvocation)
-            {
-                Console.WriteLine($"== REQUEST ==");
-                Console.WriteLine(this.GetOperationDetails(operationInvocation, typeof(T)));
-
-                return default;
-            }
-
-            public Task<T> TransmitRequestAsync<T>(OperationInvocation<T> operationInvocation)
-            {
-                Console.WriteLine($"== REQUEST ASYNC ==");
-                Console.WriteLine(this.GetOperationDetails(operationInvocation, typeof(T)));
-
-                return Task.FromResult<T>(default);
-            }
-
-            private string GetOperationDetails(OperationInvocation operation, Type returnType = null)
-            {
-                StringBuilder sb = new();
-                sb.AppendLine($"Operation: {operation.Name}");
-                if (returnType != null)
-                {
-                    sb.AppendLine($"Return type: {returnType.GetCSharpName()}");
-                }
-                if (operation.Parameters.Any())
-                {
-                    sb.AppendLine("Parameters:");
-                    foreach (ParameterValue parameter in operation.Parameters)
-                    {
-                        sb.AppendLine($"{parameter.Type.GetCSharpName()} {parameter.Name} = {parameter.Value}".Indent());
-                    }
-                }
-
-                string result = sb.ToString().TrimEnd();
-                return result;
-            }
-        }
-
-        private static void TestCSharpGeneration()
-        {
-            CSharpFile file = new(
-                "RoRamu.Decoupler.DotNet.Generator.Test",
-                null,
-                new CSharpClass[]
-                {
-                    new CSharpClass(
-                        "TestClass",
-                        CSharpAccessModifier.Public,
-                        null,
-                        null,
-                        null,
-                        new CSharpProperty[]
-                        {
-                            new CSharpProperty(
-                                "Name",
-                                typeof(string).GetCSharpName(),
-                                CSharpAccessModifier.Public,
-                                null,
-                                new CSharpDocumentationComment("Name of the person to greet.")
-                            )
-                        },
-                        null,
-                        new CSharpMethod[]
-                        {
-                            new CSharpMethod(
-                                "Hello",
-                                CSharpAccessModifier.Public,
-                                false,
-                                false,
-                                typeof(string).GetCSharpName(),
-                                new CSharpParameter[]
-                                {
-                                    new CSharpParameter("message", typeof(string).GetCSharpName(), "The message to show."),
-                                },
-@"
-return $""Hello, {this.Name}!  {message}"";
-".Trim(),
-                                new CSharpDocumentationComment("Greets the person whose name is in the 'Name' property.")
-                            )
-                        },
-                        new CSharpDocumentationComment("This is a generated test class!")
-                    )
-                },
-                null
-            );
-
-            string fileContent = file.ToString();
-            // File.WriteAllBytes("TestClass.cs", Encoding.UTF8.GetBytes(fileContent));
-            Console.WriteLine(fileContent);
         }
 
         private static void CompileAndRun(string fileContent, string codeToRun)
@@ -190,19 +80,134 @@ Severity: { codeIssue.Severity}
             }
         }
 
-        private static void TestModel()
+        private static async Task GenerateCode()
         {
             InterfaceContractDefinitionBuilder builder = new(typeof(IMyContract));
             ContractDefinition contract = builder.Build();
 
-            TransmitterGenerator generator = new(
-                ".run/",
-                "RoRamu.Decoupler.DotNet.Generator.Test",
-                CSharpAccessModifier.Public
+            string transmitterImplementationName = $"GeneratedTransmitter_{contract.Name}";
+            TransmitterGenerator transmitterGenerator = new();
+            string generatedTransmitterFile = transmitterGenerator.Run(
+                contract,
+                transmitterImplementationName,
+                "RoRamu.Decoupler.DotNet.Generator.Test"
             );
-            generator.Run(contract);
-            // string contractJson = JsonConvert.SerializeObject(contract, Formatting.Indented);
-            // Console.WriteLine(contractJson);
+
+
+            string receiverImplementationName = $"GeneratedReceiver_{contract.Name}";
+            ReceiverGenerator receiverGenerator = new();
+            string generatedReceiverFile = receiverGenerator.Run(
+                contract,
+                receiverImplementationName,
+                "RoRamu.Decoupler.DotNet.Generator.Test"
+            );
+
+
+            string directory = Path.GetFullPath(".generated");
+            Directory.CreateDirectory(directory);
+
+            Console.WriteLine(generatedTransmitterFile);
+            await File.WriteAllTextAsync(Path.Combine(directory, $"{transmitterImplementationName}.cs"), generatedTransmitterFile);
+
+            Console.WriteLine(generatedReceiverFile);
+            await File.WriteAllTextAsync(Path.Combine(directory, $"{receiverImplementationName}.cs"), generatedReceiverFile);
+
+
+        }
+
+        private static async Task RunGeneratedCode()
+        {
+            // IMyContract impl = new GeneratedTransmitter_IMyContract(new TestRequestTransmitter());
+            // var response = await impl.SayGoodbyeAsync("This is my goodbye message");
+            // Console.WriteLine($"!!Result: {response}");
+
+            // var receiver = new GeneratedReceiver_IMyContract(new MyImplementation());
+            // var operationImpl = receiver.GetOperationImplementation(nameof(IMyContract.SayGoodbye), typeof(string).GetCSharpName().SingleObjectAsEnumerable(), out _);
+            // string returnObj = (string)await operationImpl(new OperationInvocation(nameof(IMyContract.SayGoodbye), new ParameterValue("message", "my friend!").SingleObjectAsEnumerable(), true));
+            // Console.WriteLine(returnObj);
+        }
+
+        private class MyImplementation : IMyContract
+        {
+            public string SayGoodbye(string message)
+            {
+                return $"Goodbye, {message}";
+            }
+
+            public Task<int> SayGoodbyeAsync(string message)
+            {
+                return Task.FromResult(this.SayGoodbye(message).Length);
+            }
+
+            public void SayHello(long val, IMyContract test)
+            {
+
+            }
+
+            public void SayNothing()
+            {
+
+            }
+
+            public Task SayNothingAsync()
+            {
+                return Task.CompletedTask;
+            }
+        }
+
+        private class TestRequestTransmitter : IOperationInvocationTransmitter
+        {
+            public void TransmitMessage(OperationInvocation operationInvocation)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"== MESSAGE ==");
+                Console.WriteLine(this.GetOperationDetails(operationInvocation));
+            }
+
+            public Task TransmitMessageAsync(OperationInvocation operationInvocation)
+            {
+                Console.WriteLine($"== MESSAGE ASYNC ==");
+                Console.WriteLine(this.GetOperationDetails(operationInvocation));
+
+                return Task.CompletedTask;
+            }
+
+            public T TransmitRequest<T>(OperationInvocation operationInvocation)
+            {
+                Console.WriteLine($"== REQUEST ==");
+                Console.WriteLine(this.GetOperationDetails(operationInvocation, typeof(T)));
+
+                return default;
+            }
+
+            public Task<T> TransmitRequestAsync<T>(OperationInvocation operationInvocation)
+            {
+                Console.WriteLine($"== REQUEST ASYNC ==");
+                Console.WriteLine(this.GetOperationDetails(operationInvocation, typeof(T)));
+
+                return Task.FromResult<T>(default);
+            }
+
+            private string GetOperationDetails(OperationInvocation operation, Type returnType = null)
+            {
+                StringBuilder sb = new();
+                sb.AppendLine($"Operation: {operation.Name}");
+                if (returnType != null)
+                {
+                    sb.AppendLine($"Return type: {returnType.GetCSharpName()}");
+                }
+                if (operation.Parameters.Any())
+                {
+                    sb.AppendLine("Parameters:");
+                    foreach (ParameterValue parameter in operation.Parameters)
+                    {
+                        sb.AppendLine($"{parameter.TypeCSharpName} {parameter.Name} = {parameter.Value}".Indent());
+                    }
+                }
+
+                string result = sb.ToString().TrimEnd();
+                return result;
+            }
         }
     }
 }

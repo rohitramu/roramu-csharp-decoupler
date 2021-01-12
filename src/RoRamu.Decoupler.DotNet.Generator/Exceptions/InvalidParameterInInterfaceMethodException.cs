@@ -16,7 +16,7 @@
         public ParameterInfo InvalidParameter { get; }
 
         /// <inheritdoc/>
-        public InvalidParameterInInterfaceMethodException(Type @interface, MethodInfo method, ParameterInfo invalidParameter, string reason) : base(
+        internal InvalidParameterInInterfaceMethodException(Type @interface, MethodInfo method, ParameterInfo invalidParameter, string reason) : base(
             @interface,
             method,
             GetErrorMessage(invalidParameter, reason))
@@ -25,7 +25,7 @@
         }
 
         /// <inheritdoc/>
-        public InvalidParameterInInterfaceMethodException(Type @interface, MethodInfo method, ParameterInfo invalidParameter, string reason, Exception innerException) : base(
+        internal InvalidParameterInInterfaceMethodException(Type @interface, MethodInfo method, ParameterInfo invalidParameter, string reason, Exception innerException) : base(
             @interface,
             method,
             GetErrorMessage(invalidParameter, reason), innerException)

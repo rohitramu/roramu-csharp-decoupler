@@ -9,7 +9,6 @@
         <ProjectReference Include="..\RoRamu.Decoupler\RoRamu.Decoupler.csproj" />
         <ProjectReference Include="..\RoRamu.Decoupler.DotNet\RoRamu.Decoupler.DotNet.csproj" />
         <ProjectReference Include="..\RoRamu.Decoupler.DotNet.Generator\RoRamu.Decoupler.DotNet.Generator.csproj" />
-        <ProjectReference Include="..\RoRamu.Decoupler.DotNet.Generator.Transmitter\RoRamu.Decoupler.DotNet.Generator.Transmitter.csproj" />
     </ItemGroup>
 
     <ItemGroup>

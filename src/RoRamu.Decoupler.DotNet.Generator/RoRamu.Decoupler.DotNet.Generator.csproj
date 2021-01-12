@@ -2,10 +2,15 @@
 
     <ItemGroup>
         <ProjectReference Include="..\RoRamu.Decoupler\RoRamu.Decoupler.csproj" />
+        <ProjectReference Include="..\RoRamu.Decoupler.DotNet\RoRamu.Decoupler.DotNet.csproj" />
+        <ProjectReference Include="..\RoRamu.Decoupler.DotNet.Transmitter\RoRamu.Decoupler.DotNet.Transmitter.csproj" />
+        <ProjectReference Include="..\RoRamu.Decoupler.DotNet.Receiver\RoRamu.Decoupler.DotNet.Receiver.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="RoRamu.Utils" />
         <PackageReference Include="RoRamu.Utils.CSharp" />
+
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     </ItemGroup>
 

@@ -2,7 +2,7 @@
     // Use IntelliSense to find out which attributes exist for C# debugging
     // Use hover for the description of the existing attributes
     // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-    "version": "0.2.0",
+    "version": "2.0.0",
     "configurations": [
         {
             "name": "Test app - .NET Core Launch (console)",
@@ -18,7 +18,7 @@
             "stopAtEntry": false
         },
         {
-            "name": "Transmitter.App - .NET Core Launch (console)",
+            "name": "Generator.Transmitter.App - .NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -26,11 +26,9 @@
             "program": "${workspaceFolder}/src/RoRamu.Decoupler.DotNet.Generator.Transmitter.App/bin/Debug/net5.0/RoRamu.Decoupler.DotNet.Generator.Transmitter.App.exe",
             "args": [
                 "${workspaceFolder}/test/RoRamu.Decoupler.DotNet.Generator.Test/bin/Debug/net5.0/RoRamu.Decoupler.DotNet.Generator.Test.dll",
-                ".run",
-                "Public",
                 "RoRamu.Custom.Namespace"
             ],
-            "cwd": "${workspaceFolder}/src/RoRamu.Decoupler.DotNet.Generator.Transmitter.App",
+            "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

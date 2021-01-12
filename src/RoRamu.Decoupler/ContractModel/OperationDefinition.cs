@@ -1,6 +1,8 @@
 namespace RoRamu.Decoupler
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Represents the definition of an operation in a contract.
@@ -25,7 +27,9 @@ namespace RoRamu.Decoupler
         /// <summary>
         /// The parameters that the operation requires as input.
         /// </summary>
-        public ParameterDefinitionList Parameters { get; } = new ParameterDefinitionList();
+        public IReadOnlyList<ParameterDefinition> Parameters { get; }
+
+        private static readonly IReadOnlyList<ParameterDefinition> EmptyParameterList = Array.Empty<ParameterDefinition>().ToList().AsReadOnly();
 
         /// <summary>
         /// Creates a new <see cref="OperationDefinition" />.
@@ -33,11 +37,15 @@ namespace RoRamu.Decoupler
         /// <param name="name">The name of the operation.</param>
         /// <param name="returnType">The return type of the operation.</param>
         /// <param name="description">A description of this operation.</param>
-        public OperationDefinition(string name, Type returnType, string description)
+        /// <param name="parameters">The parameters that the operation requires as input.</param>
+        public OperationDefinition(string name, Type returnType, string description, IEnumerable<ParameterDefinition> parameters = null)
         {
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
-            this.Description = description;
             this.ReturnType = returnType ?? throw new ArgumentNullException(nameof(returnType));
+            this.Description = description;
+            this.Parameters = parameters == null
+                ? EmptyParameterList
+                : new List<ParameterDefinition>(parameters).AsReadOnly();
         }
     }
 }

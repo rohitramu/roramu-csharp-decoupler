@@ -1,6 +1,7 @@
-namespace RoRamu.Decoupler.DotNet.Generator.Receiver
+namespace RoRamu.Decoupler.DotNet.Receiver
 {
-    using System.Threading.Tasks;
+    using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Contains the behaviors for receiving an operation invocation.
@@ -8,27 +9,15 @@ namespace RoRamu.Decoupler.DotNet.Generator.Receiver
     public interface IOperationInvocationReceiver
     {
         /// <summary>
-        /// Receives the operation invocation so it can later be passed to an implementation of the contract.
+        /// Gets a method which can execute the operation.
         /// </summary>
-        Task ReceiveMessageAsync(OperationInvocation operationInvocation);
-
-        /// <summary>
-        /// Receives the operation invocation so it can later be passed to an implementation of the contract.
-        /// </summary>
-        void ReceiveMessage(OperationInvocation operationInvocation);
-
-        /// <summary>
-        /// Receives the operation invocation so it can later be passed to an implementation of the contract.
-        /// </summary>
-        /// <typeparam name="T">The type of the value returned by the operation invocation.</typeparam>
-        /// <returns>The result of the operation invocation.</returns>
-        Task<T> ReceiveRequestAsync<T>(OperationInvocation<T> operationInvocation);
-
-        /// <summary>
-        /// Receives the operation invocation so it can later be passed to an implementation of the contract.
-        /// </summary>
-        /// <typeparam name="T">The type of the value returned by the operation invocation.</typeparam>
-        /// <returns>The result of the operation invocation.</returns>
-        T ReceiveRequest<T>(OperationInvocation<T> operationInvocation);
+        /// <param name="operationName">The name of the operation.</param>
+        /// <param name="parameterTypeNames">
+        /// The type names of the parameters.  This must be in the same order as they were defined
+        /// by the contract.
+        /// </param>
+        /// <param name="parameterTypes">The actual types of the parameters.  Useful for deserialization.</param>
+        /// <returns>A method which can execute the operation.</returns>
+        Delegates.ExecuteOperationFunc GetOperationImplementation(string operationName, IEnumerable<string> parameterTypeNames, out IEnumerable<Type> parameterTypes);
     }
 }

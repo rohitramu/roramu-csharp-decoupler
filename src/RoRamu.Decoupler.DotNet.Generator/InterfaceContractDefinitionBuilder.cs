@@ -55,27 +55,12 @@ namespace RoRamu.Decoupler.DotNet.Generator
             // TODO: Deal with naming conflicts between methods from different interfaces
             IEnumerable<MethodInfo> methods = ReflectionHelpers.GetMethods(interfaces);
 
-            // Create the contract definition
-            ContractDefinition contract = new ContractDefinition(
-                name: this.InterfaceType.Name, // this.GetInterfaceName(),
-                description: addDocs
-                    ? this.InterfaceType.GetDocumentationComment(xmlDocumentationFile)
-                    : null
-            );
-
             // Add each method to the contract
+            IList<OperationDefinition> operations = new List<OperationDefinition>();
             foreach (MethodInfo method in methods)
             {
-                // Create the operation
-                OperationDefinition operation = new OperationDefinition(
-                    name: method.Name,
-                    returnType: method.ReturnType, // TODO: Validate that input and outputs are either value types or POCOs
-                    description: addDocs
-                        ? method.GetDocumentationComment(xmlDocumentationFile)
-                        : null
-                );
-
-                // Add the parameters
+                // Collect a list of the parameters
+                IList<ParameterDefinition> parameters = new List<ParameterDefinition>();
                 HashSet<string> seenParameterNames = new HashSet<string>();
                 foreach (ParameterInfo parameter in method.GetParameters())
                 {
@@ -102,15 +87,34 @@ namespace RoRamu.Decoupler.DotNet.Generator
                     }
 
                     // Add the parameter to the operation
-                    operation.Parameters.Add(new ParameterDefinition(parameter.Name, parameter.ParameterType));
+                    parameters.Add(new ParameterDefinition(parameter.Name, parameter.ParameterType));
 
                     // Mark the parameter name as "seen"
                     seenParameterNames.Add(parameter.Name);
                 }
 
+                // Create the operation
+                OperationDefinition operation = new OperationDefinition(
+                    name: method.Name,
+                    returnType: method.ReturnType, // TODO: Validate that input and outputs are either value types or POCOs
+                    description: addDocs
+                        ? method.GetDocumentationComment(xmlDocumentationFile)
+                        : null,
+                    parameters: parameters
+                );
+
                 // Add the operation to the contract
-                contract.Operations.Add(operation);
+                operations.Add(operation);
             }
+
+            // Create the contract definition
+            ContractDefinition contract = new ContractDefinition(
+                name: this.InterfaceType.Name,
+                description: addDocs
+                    ? this.InterfaceType.GetDocumentationComment(xmlDocumentationFile)
+                    : null,
+                operations
+            );
 
             // Cache the result so we don't re-calculate it every time
             this.ContractDefinition = contract;

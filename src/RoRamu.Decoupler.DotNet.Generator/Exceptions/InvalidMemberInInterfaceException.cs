@@ -17,13 +17,13 @@
         public MemberInfo InvalidMember { get; }
 
         /// <inheritdoc/>
-        public InvalidMemberInInterfaceException(Type @interface, MemberInfo invalidMember, string reason) : base(@interface, GetErrorMessage(@interface, invalidMember, reason))
+        internal InvalidMemberInInterfaceException(Type @interface, MemberInfo invalidMember, string reason) : base(@interface, GetErrorMessage(@interface, invalidMember, reason))
         {
             this.InvalidMember = invalidMember;
         }
 
         /// <inheritdoc/>
-        public InvalidMemberInInterfaceException(Type @interface, MemberInfo invalidMember, string reason, Exception innerException) : base(@interface, GetErrorMessage(@interface, invalidMember, reason), innerException)
+        internal InvalidMemberInInterfaceException(Type @interface, MemberInfo invalidMember, string reason, Exception innerException) : base(@interface, GetErrorMessage(@interface, invalidMember, reason), innerException)
         {
             this.InvalidMember = invalidMember;
         }

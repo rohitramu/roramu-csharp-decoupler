@@ -1,4 +1,4 @@
-namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
+namespace RoRamu.Decoupler.DotNet.Transmitter
 {
     using System.Threading.Tasks;
 
@@ -22,13 +22,13 @@ namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
         /// </summary>
         /// <typeparam name="T">The type of the value returned by the operation invocation.</typeparam>
         /// <returns>The result of the operation invocation.</returns>
-        Task<T> TransmitRequestAsync<T>(OperationInvocation<T> operationInvocation);
+        Task<T> TransmitRequestAsync<T>(OperationInvocation operationInvocation);
 
         /// <summary>
         /// Transmits the operation invocation to a receiver.
         /// </summary>
         /// <typeparam name="T">The type of the value returned by the operation invocation.</typeparam>
         /// <returns>The result of the operation invocation.</returns>
-        T TransmitRequest<T>(OperationInvocation<T> operationInvocation);
+        T TransmitRequest<T>(OperationInvocation operationInvocation);
     }
 }

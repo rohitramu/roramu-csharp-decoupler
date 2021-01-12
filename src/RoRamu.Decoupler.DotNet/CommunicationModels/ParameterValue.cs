@@ -1,6 +1,7 @@
 namespace RoRamu.Decoupler.DotNet
 {
     using System;
+    using RoRamu.Utils.CSharp;
 
     /// <summary>
     /// Represents the value of a parameter provided as input to an operation.
@@ -8,9 +9,9 @@ namespace RoRamu.Decoupler.DotNet
     public class ParameterValue
     {
         /// <summary>
-        /// The type of the parameter.
+        /// The type of the parameter as it would be seen in fully-qualified C# code.
         /// </summary>
-        public Type Type { get; }
+        public string TypeCSharpName { get; }
 
         /// <summary>
         /// The name of the parameter.
@@ -27,22 +28,12 @@ namespace RoRamu.Decoupler.DotNet
         /// </summary>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
-        /// <typeparam name="T">The type of the value.</typeparam>
-        /// <returns>The new <see cref="ParameterValue" />.</returns>
-        public static ParameterValue Create<T>(string name, T value)
+        /// <param name="typeCSharpName">The type name of the parameter as it would be seen in fully-qualified C# code.</param>
+        public ParameterValue(string name, object value, string typeCSharpName = null)
         {
-            return new ParameterValue(name, value, typeof(T));
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="ParameterValue" /> instance.
-        /// </summary>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value of the parameter.</param>
-        /// <param name="type">The type of the parameter.</param>
-        private ParameterValue(string name, object value, Type type)
-        {
-            this.Type = type ?? throw new ArgumentNullException(nameof(type));
+            this.TypeCSharpName = typeCSharpName
+                ?? value?.GetType().GetCSharpName()
+                ?? throw new ArgumentException("If the provided value is null, the type name must be provided.", nameof(typeCSharpName));
             this.Name = name;
             this.Value = value;
         }
@@ -63,6 +54,27 @@ namespace RoRamu.Decoupler.DotNet
 
             value = default;
             return false;
+        }
+
+        /// <summary>
+        /// Retrieves the value and casts it to the given type.
+        /// </summary>
+        /// <typeparam name="T">The type to cast the value to.</typeparam>
+        /// <returns>The value.</returns>
+        public T GetValue<T>()
+        {
+            if (this.Value == null)
+            {
+                return default;
+            }
+
+            if (this.Value is T val)
+            {
+                return val;
+            }
+
+            // TODO: Make a custom exception for this
+            throw new ArgumentException($"Unable to cast parameter of type '{this.Value?.GetType().GetCSharpName()}' to '{typeof(T).GetCSharpName()}'");
         }
     }
 }

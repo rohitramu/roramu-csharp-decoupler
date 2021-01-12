@@ -11,10 +11,16 @@
     public class NotAnInterfaceException : DecouplerGeneratorException
     {
         /// <inheritdoc/>
-        public NotAnInterfaceException(Type type) : base(type, GetErrorMessage(type)) { }
+        internal NotAnInterfaceException(Type type) : base(type, GetErrorMessage(type))
+        {
+
+        }
 
         /// <inheritdoc/>
-        public NotAnInterfaceException(Type type, Exception innerException) : base(type, GetErrorMessage(type), innerException) { }
+        internal NotAnInterfaceException(Type type, Exception innerException) : base(type, GetErrorMessage(type), innerException)
+        {
+
+        }
 
         private static string GetErrorMessage(Type type)
         {
