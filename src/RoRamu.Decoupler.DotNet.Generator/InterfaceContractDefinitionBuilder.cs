@@ -110,6 +110,7 @@ namespace RoRamu.Decoupler.DotNet.Generator
             // Create the contract definition
             ContractDefinition contract = new ContractDefinition(
                 name: this.InterfaceType.Name,
+                fullName: this.InterfaceType.GetCSharpName(),
                 description: addDocs
                     ? this.InterfaceType.GetDocumentationComment(xmlDocumentationFile)
                     : null,

@@ -43,7 +43,7 @@ namespace RoRamu.Decoupler.DotNet.Generator
                 constructors: this.GetConstructors(implementationName),
                 methods: this.GetMethods(contract.Operations),
                 baseType: baseClass.GetCSharpName(),
-                interfaces: contract.Name.SingleObjectAsEnumerable(),
+                interfaces: contract.FullName.SingleObjectAsEnumerable(),
                 documentationComment: new CSharpDocumentationComment(summary: null, rawNotes: contract.Description));
 
             yield return @class;
