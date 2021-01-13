@@ -43,7 +43,7 @@ namespace RoRamu.Decoupler.DotNet.Generator
                 properties: this.GetProperties(contract),
                 constructors: this.GetConstructors(contract, implementationName),
                 methods: this.GetMethods(contract),
-                baseType: $"{baseClass.GetCSharpName(identifierOnly: true)}<{contract.Name}>",
+                baseType: $"{baseClass.GetCSharpName(identifierOnly: true)}<{contract.FullName}>",
                 interfaces: typeof(IOperationInvocationReceiver).GetCSharpName().SingleObjectAsEnumerable(),
                 documentationComment: new CSharpDocumentationComment(summary: null, rawNotes: contract.Description));
 
@@ -87,7 +87,7 @@ namespace RoRamu.Decoupler.DotNet.Generator
             foreach (OperationDefinition operation in contract.Operations)
             {
                 sb.Append("{ ".Indent());
-                sb.Append($"nameof({contract.Name}.{operation.Name}), ");
+                sb.Append($"nameof({contract.FullName}.{operation.Name}), ");
                 if (operation.Parameters.Any())
                 {
                     var parameterTypes = string.Join(", ", operation.Parameters.Select(p => $"typeof({p.Type.GetCSharpName()})"));
@@ -116,7 +116,7 @@ namespace RoRamu.Decoupler.DotNet.Generator
             CSharpClassConstructor result = new CSharpClassConstructor(
                 className,
                 body: null,
-                parameters: new CSharpParameter(contractImplementationParameterName, contract.Name).SingleObjectAsEnumerable(),
+                parameters: new CSharpParameter(contractImplementationParameterName, contract.FullName).SingleObjectAsEnumerable(),
                 baseClassConstructorParameterValues: contractImplementationParameterName.SingleObjectAsEnumerable(),
                 documentationComment: docComment
             );
@@ -128,7 +128,7 @@ namespace RoRamu.Decoupler.DotNet.Generator
         {
             IEnumerable<CSharpParameter> methodParameters = new CSharpParameter[]
             {
-                new CSharpParameter(ImplementationParameterName, contract.Name),
+                new CSharpParameter(ImplementationParameterName, contract.FullName),
                 new CSharpParameter(OperationInvocationParameterName, typeof(OperationInvocation).GetCSharpName()),
             };
 
