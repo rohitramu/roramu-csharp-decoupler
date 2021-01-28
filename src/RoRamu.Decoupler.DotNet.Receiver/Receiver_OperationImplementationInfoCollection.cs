@@ -9,9 +9,12 @@ namespace RoRamu.Decoupler.DotNet.Receiver
         /// <summary>
         /// A collection of
         /// </summary>
-        protected class OperationImplementationInfoCollection
+        protected class OperationImplementationInfoCollection : IEnumerable
         {
             private IDictionary<string, IDictionary<TypeNameList, OperationImplementationInfo>> OperationImplementationInfos { get; } = new Dictionary<string, IDictionary<TypeNameList, OperationImplementationInfo>>();
+
+            /// <inheritdoc />
+            public IEnumerator GetEnumerator() => this.OperationImplementationInfos.Values.GetEnumerator();
 
             /// <summary>
             /// Adds information about an operation implementation to this collection.

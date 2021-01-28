@@ -115,7 +115,7 @@ Severity: { codeIssue.Severity}
 
         }
 
-        private static async Task RunGeneratedCode()
+        private static void RunGeneratedCode()
         {
             // IMyContract impl = new GeneratedTransmitter_IMyContract(new LocalRequestTransmitter<IMyContract>(new GeneratedReceiver_IMyContract(new MyImplementation())));
             // var response = await impl.SayGoodbyeAsync("Harjaap");
