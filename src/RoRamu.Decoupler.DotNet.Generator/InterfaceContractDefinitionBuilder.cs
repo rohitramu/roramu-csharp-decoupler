@@ -9,47 +9,21 @@ namespace RoRamu.Decoupler.DotNet.Generator
     /// <summary>
     /// Produces a contract given a C# interface.
     /// </summary>
-    public class InterfaceContractDefinitionBuilder : IContractDefinitionBuilder
+    public static class InterfaceContractDefinitionBuilder
     {
-        /// <summary>
-        /// The type of the interface for which a contract definition will be built.
-        /// </summary>
-        public Type InterfaceType { get; }
-
-        private ContractDefinition ContractDefinition { get; set; }
-
-        /// <summary>
-        /// Creates a new <see cref="InterfaceContractDefinitionBuilder" />.
-        /// </summary>
-        /// <param name="interfaceType">The type of the interface for which a contract definition will be built.</param>
-        public InterfaceContractDefinitionBuilder(Type interfaceType)
-        {
-            this.InterfaceType = interfaceType ?? throw new ArgumentNullException(nameof(interfaceType));
-
-            // Make sure the provided type is actually an interface
-            if (!this.InterfaceType.IsInterface)
-            {
-                throw new NotAnInterfaceException(interfaceType);
-            }
-        }
-
         /// <summary>
         /// Builds the contract definition by treating each method in the interface as an operation.
         /// </summary>
         /// <returns>The contract definition.</returns>
-        public ContractDefinition Build()
+        public static ContractDefinition BuildContract(Type interfaceType)
         {
-            // Return the cached result if we have one
-            if (this.ContractDefinition != null)
-            {
-                return this.ContractDefinition;
-            }
+            ValidateInterfaceType(interfaceType);
 
             // Get the XML documentation file for the assembly that contains the interface
-            bool addDocs = this.InterfaceType.Assembly.TryGetXmlDocumentationFile(out XmlDocument xmlDocumentationFile);
+            bool addDocs = interfaceType.Assembly.TryGetXmlDocumentationFile(out XmlDocument xmlDocumentationFile);
 
             // Get all of the inherited interfaces
-            IEnumerable<Type> interfaces = ReflectionHelpers.GetInheritedInterfaces(this.InterfaceType);
+            IEnumerable<Type> interfaces = ReflectionHelpers.GetInheritedInterfaces(interfaceType);
 
             // Get all of the methods in the interfaces
             // TODO: Deal with naming conflicts between methods from different interfaces
@@ -68,7 +42,7 @@ namespace RoRamu.Decoupler.DotNet.Generator
                     // Validate that we don't have a duplicate parameter
                     if (seenParameterNames.Contains(parameter.Name))
                     {
-                        throw new InvalidParameterInInterfaceMethodException(this.InterfaceType, method, parameter, $"Found duplicate parameter name: {parameter.Name}");
+                        throw new InvalidParameterInInterfaceMethodException(interfaceType, method, parameter, $"Found duplicate parameter name: {parameter.Name}");
                     }
 
                     // Validate that the parameter is not an "out" or "ref" parameter
@@ -79,11 +53,11 @@ namespace RoRamu.Decoupler.DotNet.Generator
                         if (parameter.IsOut)
                         {
                             // Fail on "out" parameters
-                            throw new InvalidParameterInInterfaceMethodException(this.InterfaceType, method, parameter, $"'out' parameters are not allowed");
+                            throw new InvalidParameterInInterfaceMethodException(interfaceType, method, parameter, $"'out' parameters are not allowed");
                         }
 
                         // Fail on "ref" parameters
-                        throw new InvalidParameterInInterfaceMethodException(this.InterfaceType, method, parameter, $"'ref' parameters are not allowed");
+                        throw new InvalidParameterInInterfaceMethodException(interfaceType, method, parameter, $"'ref' parameters are not allowed");
                     }
 
                     // Add the parameter to the operation
@@ -109,23 +83,22 @@ namespace RoRamu.Decoupler.DotNet.Generator
 
             // Create the contract definition
             ContractDefinition contract = new ContractDefinition(
-                name: this.InterfaceType.Name,
-                fullName: this.InterfaceType.GetCSharpName(),
+                name: interfaceType.Name,
+                fullName: interfaceType.GetCSharpName(),
                 description: addDocs
-                    ? this.InterfaceType.GetDocumentationComment(xmlDocumentationFile)
+                    ? interfaceType.GetDocumentationComment(xmlDocumentationFile)
                     : null,
                 operations
             );
 
-            // Cache the result so we don't re-calculate it every time
-            this.ContractDefinition = contract;
-
             return contract;
         }
 
-        private string GetInterfaceName()
+        private static string GetInterfaceName(Type interfaceType)
         {
-            string interfaceName = this.InterfaceType.Name;
+            ValidateInterfaceType(interfaceType);
+
+            string interfaceName = interfaceType.Name;
 
             // If the name starts with an "I" (convention for interfaces in C#), then remove it.
             // NOTE: If the second character is not capitalized, the "I" is most likely part of the
@@ -137,6 +110,19 @@ namespace RoRamu.Decoupler.DotNet.Generator
             }
 
             return interfaceName;
+        }
+
+        private static void ValidateInterfaceType(Type interfaceType)
+        {
+            if (interfaceType == null)
+            {
+                throw new ArgumentNullException(nameof(interfaceType));
+            }
+            // Make sure the provided type is actually an interface
+            if (!interfaceType.IsInterface)
+            {
+                throw new NotAnInterfaceException(interfaceType);
+            }
         }
     }
 }

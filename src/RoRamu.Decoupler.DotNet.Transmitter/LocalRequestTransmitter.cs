@@ -15,31 +15,73 @@ namespace RoRamu.Decoupler.DotNet.Transmitter
     {
         private Receiver<TImplementation> Receiver { get; }
 
+        /// <summary>
+        /// Creates a new <see cref="LocalRequestTransmitter{TImplementation}" />.
+        /// </summary>
+        /// <param name="receiver">The new <see cref="LocalRequestTransmitter{TImplementation}" />.</param>
         public LocalRequestTransmitter(Receiver<TImplementation> receiver)
         {
             this.Receiver = receiver ?? throw new ArgumentNullException(nameof(receiver));
         }
 
+        /// <summary>
+        /// Transmits an operation invocation which represents a message.
+        /// </summary>
+        /// <param name="operationInvocation">The operation invocation to transmit.</param>
         public void TransmitMessage(OperationInvocation operationInvocation)
         {
+            if (operationInvocation == null)
+            {
+                throw new ArgumentNullException(nameof(operationInvocation));
+            }
+
             var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.TypeCSharpName), out _);
             func(operationInvocation).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Transmits an operation invocation which represents a message asynchronously.
+        /// </summary>
+        /// <param name="operationInvocation">The operation invocation to transmit.</param>
         public async Task TransmitMessageAsync(OperationInvocation operationInvocation)
         {
+            if (operationInvocation == null)
+            {
+                throw new ArgumentNullException(nameof(operationInvocation));
+            }
+
             var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.TypeCSharpName), out _);
             await func(operationInvocation);
         }
 
+        /// <summary>
+        /// Transmits an operation invocation which represents a request.
+        /// </summary>
+        /// <param name="operationInvocation">The operation invocation to transmit.</param>
+        /// <returns>The result of the request.</returns>
         public T TransmitRequest<T>(OperationInvocation operationInvocation)
         {
+            if (operationInvocation == null)
+            {
+                throw new ArgumentNullException(nameof(operationInvocation));
+            }
+
             var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.TypeCSharpName), out _);
             return (T)func(operationInvocation).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Transmits an operation invocation which represents a request asynchronously.
+        /// </summary>
+        /// <param name="operationInvocation">The operation invocation to transmit.</param>
+        /// <returns>The result of the request.</returns>
         public async Task<T> TransmitRequestAsync<T>(OperationInvocation operationInvocation)
         {
+            if (operationInvocation == null)
+            {
+                throw new ArgumentNullException(nameof(operationInvocation));
+            }
+
             var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.TypeCSharpName), out _);
             return (T)await func(operationInvocation);
         }

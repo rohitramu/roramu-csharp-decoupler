@@ -6,16 +6,12 @@ namespace RoRamu.Decoupler.DotNet.Receiver
 
     public partial class Receiver<TContractImplementation>
     {
-        protected class OperationImplementationInfoCollection : IEnumerable
+        /// <summary>
+        /// A collection of
+        /// </summary>
+        protected class OperationImplementationInfoCollection
         {
             private IDictionary<string, IDictionary<TypeNameList, OperationImplementationInfo>> OperationImplementationInfos { get; } = new Dictionary<string, IDictionary<TypeNameList, OperationImplementationInfo>>();
-
-            public OperationImplementationInfoCollection()
-            {
-            }
-
-            /// <inheritdoc />
-            public IEnumerator GetEnumerator() => this.OperationImplementationInfos.Values.GetEnumerator();
 
             /// <summary>
             /// Adds information about an operation implementation to this collection.
@@ -59,6 +55,12 @@ namespace RoRamu.Decoupler.DotNet.Receiver
                 overloads.Add(parameterTypeNames, implementationInfo);
             }
 
+            /// <summary>
+            /// Gets an <see cref="OperationImplementationInfo" /> object from this collection.
+            /// </summary>
+            /// <param name="operationName">The operation name.</param>
+            /// <param name="parameterTypeNames">The names of the parameter types (in the correct order).</param>
+            /// <returns>The <see cref="OperationImplementationInfo" />.</returns>
             public OperationImplementationInfo GetOperationImplementationInfo(string operationName, IEnumerable<string> parameterTypeNames)
             {
                 if (!this.OperationImplementationInfos.TryGetValue(operationName, out IDictionary<TypeNameList, OperationImplementationInfo> operationImplementationInfos))

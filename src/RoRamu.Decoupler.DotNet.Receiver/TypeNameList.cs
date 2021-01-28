@@ -7,18 +7,35 @@ namespace RoRamu.Decoupler.DotNet.Receiver
 
     public partial class Receiver<TContractImplementation>
     {
+        /// <summary>
+        /// Represents a list of type names.
+        /// </summary>
         protected class TypeNameList : List<string>
         {
+            /// <summary>
+            /// Creates a <see cref="TypeNameList" />.
+            /// </summary>
+            /// <returns>A new <see cref="TypeNameList" />.</returns>
             public TypeNameList() : base()
             {
 
             }
 
+            /// <summary>
+            /// Creates a new <see cref="TypeNameList" />.
+            /// </summary>
+            /// <param name="typeNames">The type names to use as the initializer list.</param>
+            /// <returns>A new <see cref="TypeNameList" />.</returns>
             public TypeNameList(IEnumerable<string> typeNames) : base(typeNames)
             {
 
             }
 
+            /// <summary>
+            /// Creates a new <see cref="TypeNameList" />.
+            /// </summary>
+            /// <param name="types">The types whose names to use as the initializer list.</param>
+            /// <returns>A new <see cref="TypeNameList" />.</returns>
             public TypeNameList(IEnumerable<Type> types) : base(
                 types?.Select(t => t.GetCSharpName()) // Should match ParameterValue.TypeCSharpName
                 ?? throw new ArgumentNullException(nameof(types)))
@@ -26,6 +43,7 @@ namespace RoRamu.Decoupler.DotNet.Receiver
 
             }
 
+            /// <inheritdoc />
             public override bool Equals(object obj)
             {
                 if (obj == null)
@@ -54,6 +72,7 @@ namespace RoRamu.Decoupler.DotNet.Receiver
                 return true;
             }
 
+            /// <inheritdoc />
             public override int GetHashCode()
             {
                 unchecked
@@ -69,6 +88,7 @@ namespace RoRamu.Decoupler.DotNet.Receiver
                 }
             }
 
+            /// <inheritdoc />
             public override string ToString()
             {
                 return string.Join(", ", this);

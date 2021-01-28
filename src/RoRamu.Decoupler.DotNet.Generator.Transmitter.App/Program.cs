@@ -61,7 +61,7 @@ namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
             TransmitterGenerator generator = new();
             foreach (Type @interface in interfaces)
             {
-                ContractDefinition contract = new InterfaceContractDefinitionBuilder(@interface).Build();
+                ContractDefinition contract = InterfaceContractDefinitionBuilder.BuildContract(@interface);
                 generator.Run(contract, $"Generated_{@interface.GetCSharpName(identifierOnly: true)}", "RoRamu.Decoupler.DotNet.Transmitter.Test", accessModifierEnum);
             }
         }

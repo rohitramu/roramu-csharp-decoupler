@@ -83,8 +83,7 @@ Severity: { codeIssue.Severity}
 
         private static async Task GenerateCode()
         {
-            InterfaceContractDefinitionBuilder builder = new(typeof(IMyContract));
-            ContractDefinition contract = builder.Build();
+            ContractDefinition contract = InterfaceContractDefinitionBuilder.BuildContract(typeof(IMyContract));
 
             string transmitterImplementationName = $"GeneratedTransmitter_{contract.Name}";
             TransmitterGenerator transmitterGenerator = new();
@@ -162,13 +161,13 @@ Severity: { codeIssue.Severity}
             {
                 Console.WriteLine();
                 Console.WriteLine($"== MESSAGE ==");
-                Console.WriteLine(this.GetOperationDetails(operationInvocation));
+                Console.WriteLine(GetOperationDetails(operationInvocation));
             }
 
             public Task TransmitMessageAsync(OperationInvocation operationInvocation)
             {
                 Console.WriteLine($"== MESSAGE ASYNC ==");
-                Console.WriteLine(this.GetOperationDetails(operationInvocation));
+                Console.WriteLine(GetOperationDetails(operationInvocation));
 
                 return Task.CompletedTask;
             }
@@ -176,7 +175,7 @@ Severity: { codeIssue.Severity}
             public T TransmitRequest<T>(OperationInvocation operationInvocation)
             {
                 Console.WriteLine($"== REQUEST ==");
-                Console.WriteLine(this.GetOperationDetails(operationInvocation, typeof(T)));
+                Console.WriteLine(GetOperationDetails(operationInvocation, typeof(T)));
 
                 return default;
             }
@@ -184,12 +183,12 @@ Severity: { codeIssue.Severity}
             public Task<T> TransmitRequestAsync<T>(OperationInvocation operationInvocation)
             {
                 Console.WriteLine($"== REQUEST ASYNC ==");
-                Console.WriteLine(this.GetOperationDetails(operationInvocation, typeof(T)));
+                Console.WriteLine(GetOperationDetails(operationInvocation, typeof(T)));
 
                 return Task.FromResult<T>(default);
             }
 
-            private string GetOperationDetails(OperationInvocation operation, Type returnType = null)
+            private static string GetOperationDetails(OperationInvocation operation, Type returnType = null)
             {
                 StringBuilder sb = new();
                 sb.AppendLine($"Operation: {operation.Name}");
