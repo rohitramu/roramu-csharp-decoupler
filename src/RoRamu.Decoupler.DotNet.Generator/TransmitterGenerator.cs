@@ -7,7 +7,6 @@ namespace RoRamu.Decoupler.DotNet.Generator
     using RoRamu.Utils;
     using RoRamu.Utils.CSharp;
     using RoRamu.Decoupler.DotNet.Transmitter;
-    using System.Reflection;
 
     /// <summary>
     /// Generates a class which implements a given contract definition, using
@@ -44,7 +43,9 @@ namespace RoRamu.Decoupler.DotNet.Generator
                 methods: this.GetMethods(contract.Operations),
                 baseType: baseClass.GetCSharpName(),
                 interfaces: contract.FullName.SingleObjectAsEnumerable(),
-                documentationComment: new CSharpDocumentationComment(summary: null, rawNotes: contract.Description));
+                documentationComment: !string.IsNullOrWhiteSpace(contract.Description)
+                    ? new CSharpDocumentationComment(summary: null, rawNotes: contract.Description)
+                    : null);
 
             yield return @class;
         }
