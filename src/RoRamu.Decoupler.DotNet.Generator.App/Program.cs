@@ -1,4 +1,4 @@
-namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
+namespace RoRamu.Decoupler.DotNet.Generator
 {
     using System;
     using System.Collections.Generic;
@@ -22,27 +22,31 @@ namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
                 ? args[1]
                 : "Generated.By.RoRamu.Decoupler";
 
-            string outputDirectory = args.Length >= 3
+            string outputDirectoryTransmitter = args.Length >= 3
                 ? Path.GetFullPath(args[2])
                 : Path.Combine(Directory.GetCurrentDirectory(), ".generated");
 
-            string accessModifier = args.Length >= 4
-                ? args[3]
+            string outputDirectoryReceiver = args.Length >= 4
+                ? Path.GetFullPath(args[3])
+                : Path.Combine(Directory.GetCurrentDirectory(), ".generated");
+
+            string accessModifier = args.Length >= 5
+                ? args[4]
                 : CSharpAccessModifier.Public.ToString();
 
-            Program.Run(assemblyFile, outputDirectory, accessModifier, @namespace);
+            Program.Run(assemblyFile, outputDirectoryTransmitter, outputDirectoryReceiver, accessModifier, @namespace);
         }
 
-        public static void Run(string assemblyFile, string outputDirectory, string accessModifier, string @namespace)
+        public static void Run(string assemblyFile, string outputDirectoryTransmitter, string outputDirectoryReceiver, string accessModifier, string @namespace)
         {
             if (!File.Exists(assemblyFile))
             {
                 throw new ArgumentException($"Assembly file '{assemblyFile}' does not exist.", nameof(assemblyFile));
             }
 
-            if (!Directory.Exists(outputDirectory))
+            if (!Directory.Exists(outputDirectoryTransmitter))
             {
-                Directory.CreateDirectory(outputDirectory);
+                Directory.CreateDirectory(outputDirectoryTransmitter);
             }
 
             if (string.IsNullOrWhiteSpace(@namespace))
@@ -58,11 +62,26 @@ namespace RoRamu.Decoupler.DotNet.Generator.Transmitter
             Assembly assembly = Assembly.LoadFrom(assemblyFile);
             IEnumerable<Type> interfaces = Program.GetInterfaces(assembly);
 
-            TransmitterGenerator generator = new();
+            TransmitterGenerator transmitterGenerator = new();
+            ReceiverGenerator receiverGenerator = new();
             foreach (Type @interface in interfaces)
             {
+                // Build the contract definition from the interface
                 ContractDefinition contract = InterfaceContractDefinitionBuilder.BuildContract(@interface);
-                generator.Run(contract, $"Generated_{@interface.GetCSharpName(identifierOnly: true)}", "RoRamu.Decoupler.DotNet.Transmitter.Test", accessModifierEnum);
+
+                // Create the names for the transmitter and receiver classes
+                string transmitterClassName = $"Transmitter_{@interface.GetCSharpName(identifierOnly: true, includeNamespace: false)}";
+                string receiverClassName = $"Receiver_{@interface.GetCSharpName(identifierOnly: true, includeNamespace: false)}";
+
+                // Generate the transmitter code
+                string transmitterCode = transmitterGenerator.Run(contract, transmitterClassName, @namespace, accessModifierEnum);
+                string transmitterOutputFilePath = Path.Combine(outputDirectoryTransmitter, $"{transmitterClassName}.cs");
+                File.WriteAllText(transmitterOutputFilePath, transmitterCode);
+
+                // Generate the receiver code
+                string receiverCode = receiverGenerator.Run(contract, receiverClassName, @namespace, accessModifierEnum);
+                string receiverOutputFilePath = Path.Combine(outputDirectoryReceiver, $"{receiverClassName}.cs");
+                File.WriteAllText(receiverOutputFilePath, receiverCode);
             }
         }
 

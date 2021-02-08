@@ -1,0 +1,14 @@
+<Project>
+    <PropertyGroup>
+        <DecouplerTransmitterOutputDirectory>$(MSBuildProjectDirectory)_generated</DecouplerTransmitterOutputDirectory>
+        <DecouplerReceiverOutputDirectory>$(MSBuildProjectDirectory)_generated</DecouplerReceiverOutputDirectory>
+        <DecouplerOutputNamespace>RoRamu.Decoupler.Generated</DecouplerOutputNamespace>
+        <DecouplerAccessModifier>Public</DecouplerAccessModifier>
+
+        <DecouplerInterfaceAssemblyPath>SET THIS VARIABLE (DecouplerInterfaceAssemblyPath)!</DecouplerInterfaceAssemblyPath>
+    </PropertyGroup>
+
+    <Target Name="RoRamu.Decoupler.Generate">
+        <Exec Command="$(MSBuildThisFileDirectory)..\tools\$(AssemblyName).exe '$(DecouplerInterfaceAssemblyPath)' '$(DecouplerOutputNamespace)' '$(DecouplerTransmitterOutputDirectory)' '$(DecouplerReceiverOutputDirectory)' '$(DecouplerAccessModifier)'" />
+    </Target>
+</Project>
