@@ -15,4 +15,8 @@
     <NoWarn>CS7035;IDE0037</NoWarn>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="$(AssemblyName).targets" PackagePath="build/$(AssemblyName).targets" Condition="Exists('$(AssemblyName).targets')" />
+    <Content Include="$(AssemblyName).props" PackagePath="build/$(AssemblyName).props" Condition="Exists('$(AssemblyName).props')" />
+  </ItemGroup>
 </Project>
