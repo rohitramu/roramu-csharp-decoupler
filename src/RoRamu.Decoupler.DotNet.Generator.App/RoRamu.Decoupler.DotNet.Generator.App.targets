@@ -1,5 +1,6 @@
 <Project>
     <Target Name="RoRamu.Decoupler.Generate">
-        <Exec Command="$(MSBuildThisFileDirectory)..\tools\$(AssemblyName).exe '$(DecouplerInterfaceAssemblyPath)' '$(DecouplerOutputNamespace)' '$(DecouplerTransmitterOutputDirectory)' '$(DecouplerReceiverOutputDirectory)' '$(DecouplerAccessModifier)'" />
+        <Exec Command="dotnet tool install --global RoRamu.Decoupler.DotNet.Generator.App" />
+        <Exec Command="decoupler '$(DecouplerInterfaceAssemblyPath)' '$(DecouplerOutputNamespace)' '$(DecouplerTransmitterOutputDirectory)' '$(DecouplerReceiverOutputDirectory)' '$(DecouplerAccessModifier)'" />
     </Target>
 </Project>
