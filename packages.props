@@ -1,5 +1,4 @@
 <Project>
-
     <ItemGroup>
         <PackageReference Update="RoRamu.Utils" Version="*" />
         <PackageReference Update="RoRamu.Utils.Logging" Version="*" />
@@ -12,5 +11,4 @@
 
         <PackageReference Update="Newtonsoft.Json" Version="11.0.2" />
     </ItemGroup>
-
 </Project>
