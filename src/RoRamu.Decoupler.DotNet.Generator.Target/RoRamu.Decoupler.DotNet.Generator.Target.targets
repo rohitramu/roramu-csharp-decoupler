@@ -1,6 +1,6 @@
 <Project>
     <Target Name="Decoupler" AfterTargets="Build">
-        <Exec Command="dotnet tool install --global RoRamu.Decoupler.DotNet.Generator.App" />
+        <Exec Command="dotnet tool install --global RoRamu.Decoupler.DotNet.Generator.App" ContinueOnError="WarnAndContinue" />
         <Exec Command="decoupler '$(DecouplerInterfaceAssemblyPath)' '$(DecouplerOutputNamespace)' '$(DecouplerTransmitterOutputDirectory)' '$(DecouplerReceiverOutputDirectory)' '$(DecouplerAccessModifier)'" />
     </Target>
 </Project>
