@@ -1,7 +1,8 @@
 <Project>
     <Target Name="Decoupler" AfterTargets="Build">
+        <Error Condition="'$(DecouplerInterfaceAssemblyPath)' == ''" Text="Please set the build variable 'DecouplerInterfaceAssemblyPath' to generate the decoupler classes." />
         <Exec Command="dotnet tool install --global RoRamu.Decoupler.DotNet.Generator.App" ContinueOnError="WarnAndContinue" />
-        <Exec Command='decoupler --assembly "$(DecouplerInterfaceAssemblyPath)" --component Transmitter "$(DecouplerTransmitterOutputNamespace)" --outputDir "$(DecouplerTransmitterOutputDirectory)" --accessModifier "$(DecouplerTransmitterAccessModifier)"' />
-        <Exec Command='decoupler --assembly "$(DecouplerInterfaceAssemblyPath)" --component Receiver "$(DecouplerReceiverOutputNamespace)" --outputDir "$(DecouplerReceiverOutputDirectory)" --accessModifier "$(DecouplerReceiverAccessModifier)"' />
+        <Exec Command='decoupler --assembly "$(DecouplerInterfaceAssemblyPath)" --component Transmitter --namespace "$(DecouplerTransmitterOutputNamespace)" --outputDir "$(DecouplerTransmitterOutputDirectory)" --accessModifier "$(DecouplerTransmitterAccessModifier)"' />
+        <Exec Command='decoupler --assembly "$(DecouplerInterfaceAssemblyPath)" --component Receiver --namespace "$(DecouplerReceiverOutputNamespace)" --outputDir "$(DecouplerReceiverOutputDirectory)" --accessModifier "$(DecouplerReceiverAccessModifier)"' />
     </Target>
 </Project>
