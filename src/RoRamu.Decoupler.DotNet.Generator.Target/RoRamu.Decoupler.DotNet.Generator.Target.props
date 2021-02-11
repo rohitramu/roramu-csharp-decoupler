@@ -1,10 +1,10 @@
 <Project>
     <PropertyGroup>
-        <DecouplerTransmitterOutputDirectory>$(MSBuildProjectDirectory)_generated</DecouplerTransmitterOutputDirectory>
+        <DecouplerTransmitterOutputDirectory>$(MSBuildProjectDirectory)/_generated</DecouplerTransmitterOutputDirectory>
         <DecouplerTransmitterOutputNamespace>RoRamu.Decoupler.Generated</DecouplerTransmitterOutputNamespace>
         <DecouplerTransmitterAccessModifier>Public</DecouplerTransmitterAccessModifier>
 
-        <DecouplerReceiverOutputDirectory>$(MSBuildProjectDirectory)_generated</DecouplerReceiverOutputDirectory>
+        <DecouplerReceiverOutputDirectory>$(MSBuildProjectDirectory)/_generated</DecouplerReceiverOutputDirectory>
         <DecouplerReceiverOutputNamespace>RoRamu.Decoupler.Generated</DecouplerReceiverOutputNamespace>
         <DecouplerReceiverAccessModifier>Public</DecouplerReceiverAccessModifier>
 
