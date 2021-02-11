@@ -55,7 +55,7 @@ namespace RoRamu.Decoupler.DotNet.Generator.App
                 ContractDefinition contract = InterfaceContractDefinitionBuilder.BuildContract(@interface);
 
                 // Create the names for the transmitter and receiver classes
-                string className = $"{component}_{@interface.GetCSharpName(identifierOnly: true, includeNamespace: false)}";
+                string className = $"Generated{component}_{@interface.GetCSharpName(identifierOnly: true, includeNamespace: false)}";
 
                 // Generate the transmitter code
                 string code = generator.Run(contract, className, @namespace, accessModifier);
