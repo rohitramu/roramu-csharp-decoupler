@@ -15,5 +15,7 @@
 
     <ItemGroup>
         <PackageReference Include="RoRamu.Utils.CSharp" />
+
+        <PackageReference Include="CommandLineParser" />
     </ItemGroup>
 </Project>

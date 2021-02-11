@@ -1,87 +1,66 @@
-namespace RoRamu.Decoupler.DotNet.Generator
+namespace RoRamu.Decoupler.DotNet.Generator.App
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
+    using CommandLine;
     using RoRamu.Utils.CSharp;
 
     internal class Program
     {
         private static void Main(string[] args)
         {
-            if (!args.Any())
-            {
-                return;
-            }
-
-            string assemblyFile = args[0];
-
-            string @namespace = args.Length >= 2
-                ? args[1]
-                : "Generated.By.RoRamu.Decoupler";
-
-            string outputDirectoryTransmitter = args.Length >= 3
-                ? Path.GetFullPath(args[2])
-                : Path.Combine(Directory.GetCurrentDirectory(), ".generated");
-
-            string outputDirectoryReceiver = args.Length >= 4
-                ? Path.GetFullPath(args[3])
-                : Path.Combine(Directory.GetCurrentDirectory(), ".generated");
-
-            string accessModifier = args.Length >= 5
-                ? args[4]
-                : CSharpAccessModifier.Public.ToString();
-
-            Program.Run(assemblyFile, outputDirectoryTransmitter, outputDirectoryReceiver, accessModifier, @namespace);
+            Parser.Default.ParseArguments<Options>(args).WithParsed(Run);
         }
 
-        public static void Run(string assemblyFile, string outputDirectoryTransmitter, string outputDirectoryReceiver, string accessModifier, string @namespace)
+        public static void Run(Options options)
         {
+            string assemblyFile = options.AssemblyFilePath;
+            Component component = options.Component;
+            string outputDirectory = options.OutputDirectory;
+            string @namespace = options.Namespace;
+            CSharpAccessModifier accessModifier = options.AccessModifier;
+
             if (!File.Exists(assemblyFile))
             {
                 throw new ArgumentException($"Assembly file '{assemblyFile}' does not exist.", nameof(assemblyFile));
             }
-
-            if (!Directory.Exists(outputDirectoryTransmitter))
-            {
-                Directory.CreateDirectory(outputDirectoryTransmitter);
-            }
-
             if (string.IsNullOrWhiteSpace(@namespace))
             {
                 throw new ArgumentException("The provided namespace was empty.", nameof(@namespace));
             }
 
-            if (!Enum.TryParse(accessModifier, out CSharpAccessModifier accessModifierEnum))
+            // Load the assembly which contains the interfaces to generate from
+            Assembly assembly = Assembly.LoadFrom(assemblyFile);
+
+            // Create the generator
+            Generator generator = component switch
             {
-                throw new ArgumentException($"Invalid access modifier '{accessModifier}'.  It must be one of the following: {string.Join(", ", Enum.GetNames(typeof(CSharpAccessModifier)))}", nameof(accessModifier));
+                Component.Transmitter => new TransmitterGenerator(),
+                Component.Receiver => new ReceiverGenerator(),
+                _ => throw new ArgumentException("Unknown Decoupler component type.", nameof(Options.Component))
+            };
+
+            // Create the output directory if it doesn't exist
+            if (!Directory.Exists(outputDirectory))
+            {
+                Directory.CreateDirectory(outputDirectory);
             }
 
-            Assembly assembly = Assembly.LoadFrom(assemblyFile);
-            IEnumerable<Type> interfaces = Program.GetInterfaces(assembly);
-
-            TransmitterGenerator transmitterGenerator = new();
-            ReceiverGenerator receiverGenerator = new();
-            foreach (Type @interface in interfaces)
+            // Iterate over each interface, generating the output
+            foreach (Type @interface in GetInterfaces(assembly))
             {
                 // Build the contract definition from the interface
                 ContractDefinition contract = InterfaceContractDefinitionBuilder.BuildContract(@interface);
 
                 // Create the names for the transmitter and receiver classes
-                string transmitterClassName = $"Transmitter_{@interface.GetCSharpName(identifierOnly: true, includeNamespace: false)}";
-                string receiverClassName = $"Receiver_{@interface.GetCSharpName(identifierOnly: true, includeNamespace: false)}";
+                string className = $"{component}_{@interface.GetCSharpName(identifierOnly: true, includeNamespace: false)}";
 
                 // Generate the transmitter code
-                string transmitterCode = transmitterGenerator.Run(contract, transmitterClassName, @namespace, accessModifierEnum);
-                string transmitterOutputFilePath = Path.Combine(outputDirectoryTransmitter, $"{transmitterClassName}.cs");
-                File.WriteAllText(transmitterOutputFilePath, transmitterCode);
-
-                // Generate the receiver code
-                string receiverCode = receiverGenerator.Run(contract, receiverClassName, @namespace, accessModifierEnum);
-                string receiverOutputFilePath = Path.Combine(outputDirectoryReceiver, $"{receiverClassName}.cs");
-                File.WriteAllText(receiverOutputFilePath, receiverCode);
+                string code = generator.Run(contract, className, @namespace, accessModifier);
+                string outputFilePath = Path.Combine(outputDirectory, $"{className}.cs");
+                File.WriteAllText(outputFilePath, code);
             }
         }
 
