@@ -16,7 +16,7 @@ namespace RoRamu.Decoupler.DotNet.Protocol.WebSocket.Transmitter
         /// <summary>
         /// The underlying WebSocket connection.
         /// </summary>
-        private WebSocketClient Client { get; }
+        public WebSocketClient Client { get; }
 
         /// <summary>
         /// True if the WebSocket client's connection is open, otherwise false.

@@ -6,7 +6,7 @@
         <Authors>Rohit Ramu;Harjaap Singh Gill</Authors>
         <Copyright>Broadcaster</Copyright>
         <Version>0.0.0</Version>
-        <AssemblyVersion>1.0.*</AssemblyVersion>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
         <Deterministic>false</Deterministic>
         <NoWarn>CS7035;IDE0037</NoWarn>
         <IsPackable>false</IsPackable>
