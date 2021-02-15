@@ -11,7 +11,7 @@ namespace RoRamu.Decoupler.DotNet
         /// <summary>
         /// The type of the parameter as it would be seen in fully-qualified C# code.
         /// </summary>
-        public string TypeCSharpName { get; }
+        public string CSharpTypeName { get; }
 
         /// <summary>
         /// The name of the parameter.
@@ -31,7 +31,7 @@ namespace RoRamu.Decoupler.DotNet
         /// <param name="typeCSharpName">The type name of the parameter as it would be seen in fully-qualified C# code.</param>
         public ParameterValue(string name, object value, string typeCSharpName = null)
         {
-            this.TypeCSharpName = typeCSharpName
+            this.CSharpTypeName = typeCSharpName
                 ?? value?.GetType().GetCSharpName()
                 ?? throw new ArgumentException("If the provided value is null, the type name must be provided.", nameof(typeCSharpName));
             this.Name = name;

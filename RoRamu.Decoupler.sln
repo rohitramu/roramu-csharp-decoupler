@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoRamu.Decoupler.DotNet.Pro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoRamu.Decoupler.DotNet.Generator.Target", "src\RoRamu.Decoupler.DotNet.Generator.Target\RoRamu.Decoupler.DotNet.Generator.Target.csproj", "{EBE6FD60-CA00-4120-B2E9-F274422BC97A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoRamu.Decoupler.DotNet.Protocol.WebSocket", "src\RoRamu.Decoupler.DotNet.Protocol.WebSocket\RoRamu.Decoupler.DotNet.Protocol.WebSocket.csproj", "{03DCE94D-F9AA-4772-8314-9D66D6A489F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -244,6 +246,18 @@ Global
 		{EBE6FD60-CA00-4120-B2E9-F274422BC97A}.Release|x64.Build.0 = Release|Any CPU
 		{EBE6FD60-CA00-4120-B2E9-F274422BC97A}.Release|x86.ActiveCfg = Release|Any CPU
 		{EBE6FD60-CA00-4120-B2E9-F274422BC97A}.Release|x86.Build.0 = Release|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Debug|x64.Build.0 = Debug|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Debug|x86.Build.0 = Debug|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Release|x64.ActiveCfg = Release|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Release|x64.Build.0 = Release|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Release|x86.ActiveCfg = Release|Any CPU
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{902CFEEC-8D31-4425-948C-E3D40FB6F88B} = {81F92E15-CC39-469C-A672-A6717C46D684}
@@ -256,5 +270,6 @@ Global
 		{F582ED00-85BC-46B2-BAEF-B80E3FFFFC27} = {81F92E15-CC39-469C-A672-A6717C46D684}
 		{0BCA44F2-8996-41EF-98AF-DE00EF0531B2} = {81F92E15-CC39-469C-A672-A6717C46D684}
 		{EBE6FD60-CA00-4120-B2E9-F274422BC97A} = {81F92E15-CC39-469C-A672-A6717C46D684}
+		{03DCE94D-F9AA-4772-8314-9D66D6A489F3} = {81F92E15-CC39-469C-A672-A6717C46D684}
 	EndGlobalSection
 EndGlobal

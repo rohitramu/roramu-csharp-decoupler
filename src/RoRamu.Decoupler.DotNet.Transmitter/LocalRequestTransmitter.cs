@@ -35,7 +35,7 @@ namespace RoRamu.Decoupler.DotNet.Transmitter
                 throw new ArgumentNullException(nameof(operationInvocation));
             }
 
-            var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.TypeCSharpName), out _);
+            var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.CSharpTypeName), out _);
             func(operationInvocation).GetAwaiter().GetResult();
         }
 
@@ -50,7 +50,7 @@ namespace RoRamu.Decoupler.DotNet.Transmitter
                 throw new ArgumentNullException(nameof(operationInvocation));
             }
 
-            var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.TypeCSharpName), out _);
+            var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.CSharpTypeName), out _);
             await func(operationInvocation);
         }
 
@@ -66,7 +66,7 @@ namespace RoRamu.Decoupler.DotNet.Transmitter
                 throw new ArgumentNullException(nameof(operationInvocation));
             }
 
-            var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.TypeCSharpName), out _);
+            var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.CSharpTypeName), out _);
             return (T)func(operationInvocation).GetAwaiter().GetResult();
         }
 
@@ -82,7 +82,7 @@ namespace RoRamu.Decoupler.DotNet.Transmitter
                 throw new ArgumentNullException(nameof(operationInvocation));
             }
 
-            var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.TypeCSharpName), out _);
+            var func = this.Receiver.GetOperationImplementation(operationInvocation.Name, operationInvocation.Parameters.Select(p => p.CSharpTypeName), out _);
             return (T)await func(operationInvocation);
         }
     }

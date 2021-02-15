@@ -2,6 +2,7 @@ namespace RoRamu.Decoupler.DotNet.Receiver
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The base type for generated receiver classes.
@@ -30,6 +31,15 @@ namespace RoRamu.Decoupler.DotNet.Receiver
         protected Receiver(TContractImplementation contractImplementation)
         {
             this.ContractImplementation = contractImplementation ?? throw new ArgumentNullException(nameof(contractImplementation));
+        }
+
+        /// <inheritdoc />
+        public Delegates.ExecuteOperationFunc GetOperationImplementation(OperationInvocation operationInvocation, out IEnumerable<Type> parameterTypes)
+        {
+            return this.GetOperationImplementation(
+                operationInvocation.Name,
+                operationInvocation.Parameters.Select(p => p.Name),
+                out parameterTypes);
         }
 
         /// <inheritdoc />

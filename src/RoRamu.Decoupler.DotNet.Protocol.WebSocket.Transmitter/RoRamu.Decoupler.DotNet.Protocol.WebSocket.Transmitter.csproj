@@ -3,6 +3,8 @@
     <ItemGroup>
         <ProjectReference Include="..\RoRamu.Decoupler\RoRamu.Decoupler.csproj" />
         <ProjectReference Include="..\RoRamu.Decoupler.DotNet\RoRamu.Decoupler.DotNet.csproj" />
+        <ProjectReference Include="..\RoRamu.Decoupler.DotNet.Transmitter\RoRamu.Decoupler.DotNet.Transmitter.csproj" />
+        <ProjectReference Include="..\RoRamu.Decoupler.DotNet.Protocol.WebSocket\RoRamu.Decoupler.DotNet.Protocol.WebSocket.csproj" />
     </ItemGroup>
 
     <ItemGroup>

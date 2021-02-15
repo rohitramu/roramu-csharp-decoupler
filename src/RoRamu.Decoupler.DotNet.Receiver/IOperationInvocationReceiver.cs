@@ -11,6 +11,14 @@ namespace RoRamu.Decoupler.DotNet.Receiver
         /// <summary>
         /// Gets a method which can execute the operation.
         /// </summary>
+        /// <param name="operationInvocation">The operation invocation info.</param>
+        /// <param name="parameterTypes">The actual types of the parameters.  Useful for deserialization.</param>
+        /// <returns>A method which can execute the operation.</returns>
+        Delegates.ExecuteOperationFunc GetOperationImplementation(OperationInvocation operationInvocation, out IEnumerable<Type> parameterTypes);
+
+        /// <summary>
+        /// Gets a method which can execute the operation.
+        /// </summary>
         /// <param name="operationName">The name of the operation.</param>
         /// <param name="parameterTypeNames">
         /// The type names of the parameters.  This must be in the same order as they were defined
