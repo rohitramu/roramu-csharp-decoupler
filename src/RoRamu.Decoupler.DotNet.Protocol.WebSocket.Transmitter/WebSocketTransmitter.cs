@@ -16,7 +16,7 @@ namespace RoRamu.Decoupler.DotNet.Protocol.WebSocket.Transmitter
         /// <summary>
         /// The underlying WebSocket connection.
         /// </summary>
-        public WebSocketClient Client { get; }
+        private WebSocketClient Client { get; }
 
         /// <summary>
         /// True if the WebSocket client's connection is open, otherwise false.
@@ -29,7 +29,7 @@ namespace RoRamu.Decoupler.DotNet.Protocol.WebSocket.Transmitter
         /// <param name="client">The WebSocket client to use.</param>
         public WebSocketTransmitter(WebSocketClient client)
         {
-            this.Client = client ?? throw new ArgumentNullException();
+            this.Client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         /// <inheritdoc />
