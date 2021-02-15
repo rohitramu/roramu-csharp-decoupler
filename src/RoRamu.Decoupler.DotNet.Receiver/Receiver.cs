@@ -36,9 +36,14 @@ namespace RoRamu.Decoupler.DotNet.Receiver
         /// <inheritdoc />
         public Delegates.ExecuteOperationFunc GetOperationImplementation(OperationInvocation operationInvocation, out IEnumerable<Type> parameterTypes)
         {
+            if (operationInvocation == null)
+            {
+                throw new ArgumentNullException(nameof(operationInvocation));
+            }
+
             return this.GetOperationImplementation(
                 operationInvocation.Name,
-                operationInvocation.Parameters.Select(p => p.Name),
+                operationInvocation.Parameters.Select(p => p.CSharpTypeName),
                 out parameterTypes);
         }
 
@@ -55,8 +60,7 @@ namespace RoRamu.Decoupler.DotNet.Receiver
             }
 
             // Get the operation implementation (i.e. the specific overload)
-            TypeNameList parameterTypeNameList = new TypeNameList(parameterTypeNames);
-            OperationImplementationInfo operationImplementationInfo = this.Operations.GetOperationImplementationInfo(operationName, parameterTypeNameList);
+            OperationImplementationInfo operationImplementationInfo = this.Operations.GetOperationImplementationInfo(operationName, parameterTypeNames);
 
             // Return the implementing method
             parameterTypes = operationImplementationInfo.ParameterTypes;

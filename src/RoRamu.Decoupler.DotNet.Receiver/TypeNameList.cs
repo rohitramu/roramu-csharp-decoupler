@@ -10,7 +10,7 @@ namespace RoRamu.Decoupler.DotNet.Receiver
         /// <summary>
         /// Represents a list of type names.
         /// </summary>
-        protected class TypeNameList : List<string>
+        internal class TypeNameList : List<string>
         {
             /// <summary>
             /// Creates a <see cref="TypeNameList" />.
@@ -28,7 +28,10 @@ namespace RoRamu.Decoupler.DotNet.Receiver
             /// <returns>A new <see cref="TypeNameList" />.</returns>
             public TypeNameList(IEnumerable<string> typeNames) : base(typeNames)
             {
-
+                if (typeNames.Any(n => n == null))
+                {
+                    throw new ArgumentException("Found a null type name in the typeNames list.");
+                }
             }
 
             /// <summary>

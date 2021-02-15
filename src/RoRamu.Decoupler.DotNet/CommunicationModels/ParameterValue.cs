@@ -28,12 +28,12 @@ namespace RoRamu.Decoupler.DotNet
         /// </summary>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value of the parameter.</param>
-        /// <param name="typeCSharpName">The type name of the parameter as it would be seen in fully-qualified C# code.</param>
-        public ParameterValue(string name, object value, string typeCSharpName = null)
+        /// <param name="cSharpTypeName">The type name of the parameter as it would be seen in fully-qualified C# code.</param>
+        public ParameterValue(string name, object value, string cSharpTypeName = null)
         {
-            this.CSharpTypeName = typeCSharpName
+            this.CSharpTypeName = cSharpTypeName
                 ?? value?.GetType().GetCSharpName()
-                ?? throw new ArgumentException("If the provided value is null, the type name must be provided.", nameof(typeCSharpName));
+                ?? throw new ArgumentNullException("If the parameter value is null, the C# type name must be provided.", nameof(cSharpTypeName));
             this.Name = name;
             this.Value = value;
         }
@@ -63,18 +63,13 @@ namespace RoRamu.Decoupler.DotNet
         /// <returns>The value.</returns>
         public T GetValue<T>()
         {
-            if (this.Value == null)
+            if (!this.TryGetValue<T>(out T value))
             {
-                return default;
+                // TODO: Make a custom exception for this
+                throw new ArgumentException($"Unable to cast parameter of type '{this.Value?.GetType().GetCSharpName()}' to '{typeof(T).GetCSharpName()}'");
             }
 
-            if (this.Value is T val)
-            {
-                return val;
-            }
-
-            // TODO: Make a custom exception for this
-            throw new ArgumentException($"Unable to cast parameter of type '{this.Value?.GetType().GetCSharpName()}' to '{typeof(T).GetCSharpName()}'");
+            return value;
         }
     }
 }
