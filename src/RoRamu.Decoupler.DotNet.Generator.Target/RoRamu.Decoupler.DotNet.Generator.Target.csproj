@@ -1,5 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-    <ItemGroup>
-        <ProjectReference Include="$(SrcRoot)RoRamu.Decoupler.DotNet\RoRamu.Decoupler.DotNet.csproj" />
-    </ItemGroup>
-</Project>
