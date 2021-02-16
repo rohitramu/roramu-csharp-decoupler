@@ -29,12 +29,12 @@ namespace RoRamu.Decoupler.DotNet
         /// <summary>
         /// Creates a new <see cref="OperationInvocation" /> object.
         /// </summary>
-        /// <param name="operationName">The name of the operation being invoked.</param>
+        /// <param name="name">The name of the operation being invoked.</param>
         /// <param name="parameters">The parameters which will be provided as input to the operation invocation.</param>
         /// <param name="hasReturnValue">Whether or not this operation returns anything.</param>
-        public OperationInvocation(string operationName, IEnumerable<ParameterValue> parameters, bool hasReturnValue)
+        public OperationInvocation(string name, IEnumerable<ParameterValue> parameters, bool hasReturnValue)
         {
-            this.Name = operationName ?? throw new ArgumentNullException(nameof(operationName));
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
             this.Parameters = parameters == null
                 ? EmptyParameterList
                 : new List<ParameterValue>(parameters).AsReadOnly();
