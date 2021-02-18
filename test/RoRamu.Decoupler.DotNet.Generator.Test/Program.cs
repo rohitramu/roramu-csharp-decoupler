@@ -103,7 +103,7 @@ Severity: { codeIssue.Severity}
             );
 
 
-            string directory = Path.GetFullPath(".generated");
+            string directory = Path.GetFullPath("generated");
             Directory.CreateDirectory(directory);
 
             Console.WriteLine(generatedTransmitterFile);
@@ -201,7 +201,7 @@ Severity: { codeIssue.Severity}
                     sb.AppendLine("Parameters:");
                     foreach (ParameterValue parameter in operation.Parameters)
                     {
-                        sb.AppendLine($"{parameter.TypeCSharpName} {parameter.Name} = {parameter.Value}".Indent());
+                        sb.AppendLine($"{parameter.CSharpTypeName} {parameter.Name} = {parameter.Value}".Indent());
                     }
                 }
 

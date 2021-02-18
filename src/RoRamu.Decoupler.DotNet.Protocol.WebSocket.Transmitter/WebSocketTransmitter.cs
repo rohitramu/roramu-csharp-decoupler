@@ -51,7 +51,7 @@ namespace RoRamu.Decoupler.DotNet.Protocol.WebSocket.Transmitter
                 throw new ArgumentNullException(nameof(operationInvocation));
             }
 
-            await this.Client.SendMessage(new Message(null, Constants.MessageType, operationInvocation));
+            await this.Client.SendRequest(new Request(Constants.MessageType, operationInvocation));
         }
 
         /// <inheritdoc />

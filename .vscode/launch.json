@@ -5,42 +5,6 @@
     "version": "2.0.0",
     "configurations": [
         {
-            "name": "Generator.App - Transmitter",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/RoRamu.Decoupler.DotNet.Generator.App/bin/Debug/net5.0/RoRamu.Decoupler.DotNet.Generator.App.exe",
-            "args": [
-                "--assembly",
-                "${workspaceFolder}/test/RoRamu.Decoupler.DotNet.Generator.Test/bin/Debug/net5.0/RoRamu.Decoupler.DotNet.Generator.Test.dll",
-                "--component",
-                "Transmitter"
-            ],
-            "cwd": "${workspaceFolder}",
-            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
-            "console": "internalConsole",
-            "stopAtEntry": false
-        },
-        {
-            "name": "Generator.App - Receiver",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/RoRamu.Decoupler.DotNet.Generator.App/bin/Debug/net5.0/RoRamu.Decoupler.DotNet.Generator.App.exe",
-            "args": [
-                "--assembly",
-                "${workspaceFolder}/test/RoRamu.Decoupler.DotNet.Generator.Test/bin/Debug/net5.0/RoRamu.Decoupler.DotNet.Generator.Test.dll",
-                "--component",
-                "Receiver"
-            ],
-            "cwd": "${workspaceFolder}",
-            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
-            "console": "internalConsole",
-            "stopAtEntry": false
-        },
-        {
             "name": "Test app",
             "type": "coreclr",
             "request": "launch",
