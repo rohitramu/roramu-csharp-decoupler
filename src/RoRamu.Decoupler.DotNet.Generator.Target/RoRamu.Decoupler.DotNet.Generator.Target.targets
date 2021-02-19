@@ -1,0 +1,8 @@
+<Project>
+    <Target Name="Decoupler" AfterTargets="Build">
+        <Error Condition="'$(DecouplerInterfaceAssemblyPath)' == ''" Text="Please set the build variable 'DecouplerInterfaceAssemblyPath' to generate the decoupler classes." />
+        <Exec Command="dotnet tool update --global RoRamu.Decoupler.DotNet.Generator.App --ignore-failed-sources --add-source 'https://api.nuget.org/v3/index.json'" ContinueOnError="WarnAndContinue" />
+        <Exec Command='decoupler --assembly "$(DecouplerInterfaceAssemblyPath)" --component Transmitter --namespace "$(DecouplerTransmitterOutputNamespace)" --outDir "$(DecouplerTransmitterOutputDirectory)" --accessModifier "$(DecouplerTransmitterAccessModifier)"' />
+        <Exec Command='decoupler --assembly "$(DecouplerInterfaceAssemblyPath)" --component Receiver --namespace "$(DecouplerReceiverOutputNamespace)" --outDir "$(DecouplerReceiverOutputDirectory)" --accessModifier "$(DecouplerReceiverAccessModifier)"' />
+    </Target>
+</Project>
