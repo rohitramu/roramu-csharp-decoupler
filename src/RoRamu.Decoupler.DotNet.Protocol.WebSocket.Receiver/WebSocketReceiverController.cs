@@ -2,7 +2,7 @@ namespace RoRamu.Decoupler.DotNet.Protocol.WebSocket.Receiver
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Threading.Tasks;
     using RoRamu.Decoupler.DotNet.Receiver;
     using RoRamu.Utils.Messaging;
     using RoRamu.WebSocket;
@@ -41,12 +41,12 @@ namespace RoRamu.Decoupler.DotNet.Protocol.WebSocket.Receiver
         }
 
         /// <inheritdoc />
-        public override void OnMessage(Message message)
+        public override async Task OnMessage(Message message)
         {
-            this.MessageHandlerCollection.HandleMessage(message);
+            await this.MessageHandlerCollection.HandleMessage(message);
         }
 
-        private async void InvokeOperationWithMessage(Message message)
+        private async Task InvokeOperationWithMessage(Message message)
         {
             OperationInvocation op = message.GetBody<OperationInvocation>();
             var invokeFunc = this.ReceiverImplementation.GetOperationImplementation(op, out IEnumerable<Type> parameterTypes);
