@@ -25,7 +25,7 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
         /// <summary>
         ///
         /// </summary>
-        public static async void Main()
+        public static async Task Main()
         {
             await GenerateCode();
 
