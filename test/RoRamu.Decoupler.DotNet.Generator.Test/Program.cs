@@ -10,6 +10,7 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.Emit;
+    using Newtonsoft.Json;
     using RoRamu.Decoupler.DotNet;
     using RoRamu.Decoupler.DotNet.Receiver;
     using RoRamu.Decoupler.DotNet.Transmitter;
@@ -24,14 +25,25 @@ namespace RoRamu.Decoupler.DotNet.Generator.Test
         /// <summary>
         ///
         /// </summary>
-        public static async Task Main()
+        public static async void Main()
         {
             await GenerateCode();
 
             // await RunGeneratedCode();
 
+            // Test();
+
             Console.WriteLine();
             Console.WriteLine();
+        }
+
+        private static void Test()
+        {
+            string roomPath = "/test/room";
+            Console.WriteLine(JsonConvert.SerializeObject(new OperationInvocation(
+                name: "AddRoom",
+                parameters: new ParameterValue[] { new ParameterValue("roomPath", roomPath, "System.String") },
+                hasReturnValue: false)));
         }
 
         private static void CompileAndRun(string fileContent, string codeToRun)
