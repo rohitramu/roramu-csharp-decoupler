@@ -13,5 +13,7 @@
 
         <PackageReference Update="Newtonsoft.Json" Version="11.0.2" />
         <PackageReference Update="CommandLineParser" Version="2.8.0" />
+
+        <PackageReference Update="FluentAssertions" Version="5.10.3" />
     </ItemGroup>
 </Project>

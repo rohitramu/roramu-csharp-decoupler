@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="$(SrcRoot)Decoupler\RoRamu.Decoupler.csproj" />
+        <ProjectReference Include="$(SrcRoot)Decoupler.DotNet\RoRamu.Decoupler.DotNet.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="RoRamu.Utils.CSharp" />
+    </ItemGroup>
+
+</Project>

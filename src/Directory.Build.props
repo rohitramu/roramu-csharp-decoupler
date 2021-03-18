@@ -19,4 +19,11 @@
     <Content Include="$(AssemblyName).targets" PackagePath="build/$(AssemblyName).targets" Condition="Exists('$(AssemblyName).targets')" />
     <Content Include="$(AssemblyName).props" PackagePath="build/$(AssemblyName).props" Condition="Exists('$(AssemblyName).props')" />
   </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>$(AssemblyName).Test</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
 </Project>

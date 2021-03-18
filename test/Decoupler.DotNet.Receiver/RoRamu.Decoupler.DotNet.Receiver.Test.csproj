@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="$(SrcRoot)Decoupler.DotNet.Receiver/RoRamu.Decoupler.DotNet.Receiver.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" />
+    </ItemGroup>
+
+</Project>

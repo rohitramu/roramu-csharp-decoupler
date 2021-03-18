@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="$(SrcRoot)Decoupler.DotNet.Protocol.WebSocket.Transmitter/RoRamu.Decoupler.DotNet.Protocol.WebSocket.Transmitter.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" />
+    </ItemGroup>
+
+</Project>

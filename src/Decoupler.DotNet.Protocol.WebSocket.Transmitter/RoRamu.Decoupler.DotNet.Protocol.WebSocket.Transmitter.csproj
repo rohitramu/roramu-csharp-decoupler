@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="$(SrcRoot)Decoupler\RoRamu.Decoupler.csproj" />
+        <ProjectReference Include="$(SrcRoot)Decoupler.DotNet\RoRamu.Decoupler.DotNet.csproj" />
+        <ProjectReference Include="$(SrcRoot)Decoupler.DotNet.Transmitter\RoRamu.Decoupler.DotNet.Transmitter.csproj" />
+        <ProjectReference Include="$(SrcRoot)Decoupler.DotNet.Protocol.WebSocket\RoRamu.Decoupler.DotNet.Protocol.WebSocket.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="RoRamu.WebSocket.Client" />
+    </ItemGroup>
+
+</Project>
